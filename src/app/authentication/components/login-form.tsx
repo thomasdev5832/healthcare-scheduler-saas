@@ -68,7 +68,7 @@ const LoginForm = () => {
                         />
                     </CardContent>
                     <CardFooter>
-                        <Button type="submit" className="w-full">Entrar</Button>
+                        <Button type="submit" className="w-full cursor-pointer">Entrar</Button>
                     </CardFooter>
                 </form>
             </Form>
