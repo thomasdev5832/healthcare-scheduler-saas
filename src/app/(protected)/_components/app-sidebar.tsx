@@ -1,11 +1,11 @@
 "use client"
 
-import { CalendarHeart, LayoutDashboard, LogOut, Stethoscope, UsersRound } from "lucide-react"
+import { CalendarHeart, HeartPulse, LayoutDashboard, LogOut, Stethoscope, UsersRound } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
     Sidebar,
@@ -47,6 +47,8 @@ const items = [
 
 export function AppSidebar() {
     const router = useRouter();
+    const session = authClient?.useSession();
+
     const handleSignOut = async () => {
         authClient.signOut({
             fetchOptions: {
@@ -86,7 +88,17 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button>Clínica</Button>
+                                <SidebarMenuButton size="lg" className="cursor-pointer">
+                                    <Avatar>
+                                        <AvatarFallback>
+                                            <HeartPulse className="w-5 h-5" />
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="text-sm">{session.data?.user.name}</p>
+                                        <p className="text-xs text-muted-foreground">{session.data?.user.email}</p>
+                                    </div>
+                                </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
