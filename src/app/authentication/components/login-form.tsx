@@ -1,21 +1,25 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form"
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
-    name: z.string().trim().min(1, "Nome é obrigatório").max(50, "Nome deve ter no máximo 50 caracteres"),
     email: z.string().trim().email("Email inválido").min(1, "Email é obrigatório").max(100, "Email deve ter no máximo 100 caracteres"),
     password: z.string().trim().min(8, "Senha deve ter pelo menos 8 caracteres"),
 })
 
 const LoginForm = () => {
+    const router = useRouter();
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -24,14 +28,27 @@ const LoginForm = () => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof loginSchema>) {
-        console.log(values)
-    }
+    const handleSubmit = async (values: z.infer<typeof loginSchema>) => {
+        await authClient.signIn.email(
+            {
+                email: values.email,
+                password: values.password,
+            },
+            {
+                onSuccess: () => {
+                    router.push("/dashboard");
+                },
+                onError: () => {
+                    toast.error("E-mail ou senha inválidos.");
+                },
+            },
+        );
+    };
 
     return (
         <Card>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
                     <CardHeader className="space-y-2">
                         <CardTitle>Login</CardTitle>
                         <CardDescription>
@@ -68,7 +85,17 @@ const LoginForm = () => {
                         />
                     </CardContent>
                     <CardFooter>
-                        <Button type="submit" className="w-full cursor-pointer">Entrar</Button>
+                        <Button
+                            type="submit"
+                            className="w-full cursor-pointer"
+                            disabled={form.formState.isSubmitting}
+                        >
+                            {form.formState.isSubmitting ? (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : (
+                                "Entrar"
+                            )}
+                        </Button>
                     </CardFooter>
                 </form>
             </Form>
