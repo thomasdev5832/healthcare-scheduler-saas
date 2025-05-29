@@ -61,7 +61,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
             <CardFooter>
                 <Dialog open={isUpsertDoctorDialogOpen} onOpenChange={setIsUpsertDoctorDialogOpen}>
                     <DialogTrigger asChild>
-                        <Button className="w-full cursor-pointer">
+                        <Button className="w-full">
                             <List />
                             Ver detalhes</Button>
                     </DialogTrigger>
