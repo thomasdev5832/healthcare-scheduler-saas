@@ -1,16 +1,30 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SaveIcon, Stethoscope, Trash2, TriangleAlert } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { deleteDoctor } from "@/actions/delete-doctor";
 import { upsertDoctor } from "@/actions/upsert-doctor";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { doctorsTable } from "@/db/schema";
 
 import { medicalSpecialties } from "../_constants";
@@ -82,6 +96,21 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
         },
     });
 
+    const deleteDoctorAction = useAction(deleteDoctor, {
+        onSuccess: () => {
+            toast.success("Médico deletado com sucesso.");
+            onSuccess?.();
+        },
+        onError: () => {
+            toast.error("Erro ao deletar médico.");
+        },
+    });
+
+    const handleDeleteDoctorClick = () => {
+        if (!doctor) return;
+        deleteDoctorAction.execute({ id: doctor.id });
+    };
+
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         upsertDoctorAction.execute({
             ...values,
@@ -94,14 +123,19 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
 
     return (
         <DialogContent>
-            <DialogHeader>
-                <DialogTitle>{doctor ? `Dr. ${doctor.name}` : "Adicionar médico"}</DialogTitle>
+            <DialogHeader className="ml-2">
+                <DialogTitle className="flex items-center flex-row">
+                    <Stethoscope className="mr-2 h-5 w-5" />
+                    {doctor ? `${doctor.name}` : "Adicionar médico"}
+                </DialogTitle>
+
                 <DialogDescription>
                     {doctor
                         ? "Edite as informações desse médico."
                         : "Preencha os dados do novo médico."}
                 </DialogDescription>
             </DialogHeader>
+            <Separator />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
@@ -366,12 +400,54 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
                     />
 
                     <DialogFooter>
-                        <Button type="submit" disabled={upsertDoctorAction.isPending} className="w-full cursor-pointer">
+                        {doctor && (
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="outline" className="cursor-pointer" >
+                                        <Trash2 className="mr-1" />
+                                        Deletar médico
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Tem certeza que deseja deletar o médico {doctor.name}?</AlertDialogTitle>
+                                        <AlertDialogDescription className="bg-destructive/20 text-destructive font-medium border rounded-md p-4 border-destructive">
+                                            <TriangleAlert className="inline mr-2" />
+                                            Essa ação não pode ser desfeita. Todos os dados relacionados a esse médico serão perdidos, incluindo consultas agendadas.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={handleDeleteDoctorClick} className="bg-destructive hover:bg-red-700 cursor-pointer">
+                                            <Trash2 />
+                                            Deletar
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        )}
+                        <Button type="submit" disabled={upsertDoctorAction.isPending} className="cursor-pointer">
                             {upsertDoctorAction.isPending
-                                ? "Salvando..."
+                                ? (
+                                    <>
+                                        <SaveIcon />
+                                        Salvando...
+                                    </>
+                                )
                                 : doctor
-                                    ? "Salvar"
-                                    : "Adicionar"}
+                                    ? (
+                                        <>
+                                            <SaveIcon />
+                                            Atualizar
+                                        </>
+                                    )
+                                    : (
+                                        <>
+                                            <SaveIcon />
+                                            Adicionar
+                                        </>
+                                    )
+                            }
                         </Button>
                     </DialogFooter>
                 </form>

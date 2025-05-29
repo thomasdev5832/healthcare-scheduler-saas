@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarRange, CircleDollarSign, ClockIcon } from "lucide-react";
+import { CalendarRange, CircleDollarSign, ClockIcon, List } from "lucide-react";
 import { useState } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -61,7 +61,9 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
             <CardFooter>
                 <Dialog open={isUpsertDoctorDialogOpen} onOpenChange={setIsUpsertDoctorDialogOpen}>
                     <DialogTrigger asChild>
-                        <Button className="w-full cursor-pointer">Ver detalhes</Button>
+                        <Button className="w-full cursor-pointer">
+                            <List />
+                            Ver detalhes</Button>
                     </DialogTrigger>
                     <UpsertDoctorForm
                         doctor={{
