@@ -74,7 +74,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
 
     const upsertDoctorAction = useAction(upsertDoctor, {
         onSuccess: () => {
-            toast.success("Médico adicionado com sucesso.");
+            toast.success("Médico salvo com sucesso.");
             onSuccess?.();
         },
         onError: () => {
@@ -95,9 +95,11 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
     return (
         <DialogContent>
             <DialogHeader>
-                <DialogTitle>Adicionar médico</DialogTitle>
+                <DialogTitle>{doctor ? `Dr. ${doctor.name}` : "Adicionar médico"}</DialogTitle>
                 <DialogDescription>
-                    Adicione um novo médico para sua clínica.
+                    {doctor
+                        ? "Edite as informações desse médico."
+                        : "Preencha os dados do novo médico."}
                 </DialogDescription>
             </DialogHeader>
             <Form {...form}>
@@ -123,7 +125,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
                                 <FormLabel>Especialidade</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={field.value}
+                                    value={field.value}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-full">
@@ -174,7 +176,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
                                 <FormLabel>Dia inicial de disponibilidade</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={field.value}
+                                    value={field.value}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-full">
@@ -203,7 +205,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
                                 <FormLabel>Dia final de disponibilidade</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={field.value?.toString()}
+                                    value={field.value}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-full">
@@ -232,7 +234,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
                                 <FormLabel>Horário inicial de disponibilidade</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={field.value}
+                                    value={field.value}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-full">
@@ -301,7 +303,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
                                 <FormLabel>Horário final de disponibilidade</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={field.value}
+                                    value={field.value}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-full">
