@@ -10,6 +10,16 @@ Healthcare Scheduler SaaS is a web application for managing clinics, doctors, pa
 - Responsive UI with Tailwind CSS
 - Environment-based configuration
 
+## Technologies
+
+- **TypeScript** – Strongly typed JavaScript
+- **Next.js** – React framework for server-side rendering and routing
+- **Tailwind CSS** – Utility-first CSS framework
+- **shadcn/ui** – Accessible and customizable React component library
+- **next-safe-action** – Type-safe server actions for Next.js
+- **Drizzle ORM** – TypeScript ORM for PostgreSQL
+- **PostgreSQL** – Relational database management system
+
 ## Getting Started
 
 ### Prerequisites
@@ -32,10 +42,19 @@ Healthcare Scheduler SaaS is a web application for managing clinics, doctors, pa
    npm install
    ```
 
-3. Create a `.env` file in the project root and set your database URL:
+3. Create a `.env` file in the project root and set your environment variables:
 
-   ```
+   ```env
+   # PostgreSQL database URL
    DATABASE_URL=
+
+   # Authentication secrets and URLs
+   BETTER_AUTH_SECRET=
+   BETTER_AUTH_URL=
+
+   # Google OAuth credentials
+   GOOGLE_CLIENT_ID=
+   GOOGLE_CLIENT_SECRET=
    ```
 
 4. Run database migrations using Drizzle Kit:
