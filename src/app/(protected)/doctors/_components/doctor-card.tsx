@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarIcon, ClockIcon, DollarSignIcon } from "lucide-react";
+import { CalendarIcon, CalendarRange, CircleDollarSign, ClockIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { doctorsTable } from "@/db/schema";
+import { formatCurrencyInCents } from "@/helpers/currency";
 
 import { getAvailability } from "../_helpers/availability";
 import UpsertDoctorForm from "./upsert-doctor-form";
@@ -41,7 +42,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
             <Separator />
             <CardContent className="flex flex-col gap-2">
                 <Badge variant="outline" >
-                    <CalendarIcon className="mr-1" />
+                    <CalendarRange className="mr-1" />
                     {availability.from.format("dddd")} - {availability.to.format("dddd")}
                 </Badge>
                 <Badge variant="outline" >
@@ -49,8 +50,8 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
                     {availability.from.format("HH:mm")} às {availability.to.format("HH:mm")}
                 </Badge>
                 <Badge variant="outline" >
-                    <DollarSignIcon className="mr-1" />
-                    {doctor.appointmentPriceInCents / 100}
+                    <CircleDollarSign className="mr-1" />
+                    {formatCurrencyInCents(doctor.appointmentPriceInCents)}
                 </Badge>
             </CardContent>
             <Separator />
