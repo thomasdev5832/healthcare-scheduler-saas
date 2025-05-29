@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarIcon, CalendarRange, CircleDollarSign, ClockIcon } from "lucide-react";
+import { CalendarRange, CircleDollarSign, ClockIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
