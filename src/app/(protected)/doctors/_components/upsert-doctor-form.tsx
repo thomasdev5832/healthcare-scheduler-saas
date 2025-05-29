@@ -1,13 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { upsertDoctor } from "@/actions/upsert-doctor";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { doctorsTable } from "@/db/schema";
 
 import { medicalSpecialties } from "../_constants";
 
@@ -46,7 +50,12 @@ const formSchema = z
         },
     );
 
-const UpsertDoctorForm = () => {
+interface UpsertDoctorFormProps {
+    doctor?: typeof doctorsTable.$inferSelect;
+    onSuccess?: () => void;
+}
+
+const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
     const form = useForm<z.infer<typeof formSchema>>({
         shouldUnregister: true,
         resolver: zodResolver(formSchema),
@@ -61,9 +70,24 @@ const UpsertDoctorForm = () => {
         },
     });
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        // Handle form submission logic here
-        console.log("Form submitted with data:", values);
+    const upsertDoctorAction = useAction(upsertDoctor, {
+        onSuccess: () => {
+            toast.success("Médico adicionado com sucesso.");
+            onSuccess?.();
+        },
+        onError: () => {
+            toast.error("Erro ao adicionar médico.");
+        },
+    });
+
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
+        upsertDoctorAction.execute({
+            ...values,
+            id: doctor?.id,
+            availableFromWeekDay: parseInt(values.availableFromWeekDay),
+            availableToWeekDay: parseInt(values.availableToWeekDay),
+            appointmentPriceInCents: values.appointmentPrice * 100,
+        });
     };
 
     return (
@@ -338,8 +362,12 @@ const UpsertDoctorForm = () => {
                     />
 
                     <DialogFooter>
-                        <Button type="submit" className="w-full cursor-pointer">
-                            Salvar
+                        <Button type="submit" disabled={upsertDoctorAction.isPending}>
+                            {upsertDoctorAction.isPending
+                                ? "Salvando..."
+                                : doctor
+                                    ? "Salvar"
+                                    : "Adicionar"}
                         </Button>
                     </DialogFooter>
                 </form>
