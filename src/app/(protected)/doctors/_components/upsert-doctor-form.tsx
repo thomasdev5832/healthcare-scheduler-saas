@@ -60,13 +60,15 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
         shouldUnregister: true,
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            specialty: "",
-            appointmentPrice: 0,
-            availableFromWeekDay: "1",
-            availableToWeekDay: "5",
-            availableFromTime: "",
-            availableToTime: "",
+            name: doctor?.name ?? "",
+            specialty: doctor?.specialty ?? "",
+            appointmentPrice: doctor?.appointmentPriceInCents
+                ? doctor.appointmentPriceInCents / 100
+                : 0,
+            availableFromWeekDay: doctor?.availableFromWeekDay?.toString() ?? "1",
+            availableToWeekDay: doctor?.availableToWeekDay?.toString() ?? "5",
+            availableFromTime: doctor?.availableFromTime ?? "",
+            availableToTime: doctor?.availableToTime ?? "",
         },
     });
 
@@ -362,7 +364,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
                     />
 
                     <DialogFooter>
-                        <Button type="submit" disabled={upsertDoctorAction.isPending}>
+                        <Button type="submit" disabled={upsertDoctorAction.isPending} className="w-full cursor-pointer">
                             {upsertDoctorAction.isPending
                                 ? "Salvando..."
                                 : doctor
