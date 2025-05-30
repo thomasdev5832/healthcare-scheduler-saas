@@ -373,31 +373,27 @@ const UpsertAppointmentForm = ({
 
                     <Separator />
 
-                    <DialogFooter className="gap-2 sm:gap-0">
+                    <DialogFooter>
                         {appointment && (
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button type="button" variant="destructive">
-                                        <Trash2 className="h-4 w-4 mr-2" />
-                                        Excluir
+                                    <Button type="button" variant="outline">
+                                        <Trash2 className="mr-1" />
+                                        Excluir consulta
                                     </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle className="flex items-center">
-                                            <TriangleAlert className="mr-2 h-5 w-5 text-destructive" />
-                                            Tem certeza que deseja excluir?
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            Esta ação não poderá ser desfeita.
+                                        <AlertDialogTitle>Tem certeza que deseja excluir esta consulta?</AlertDialogTitle>
+                                        <AlertDialogDescription className="bg-destructive/20 text-destructive font-medium border rounded-md p-4 border-destructive">
+                                            <TriangleAlert className="inline mr-2" />
+                                            Essa ação não pode ser desfeita. Todos os dados relacionados a essa consulta serão perdidos.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                        <AlertDialogAction
-                                            onClick={handleDeleteAppointmentClick}
-                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                        >
+                                        <AlertDialogCancel className="cursor-pointer">Cancelar</AlertDialogCancel>
+                                        <AlertDialogAction onClick={handleDeleteAppointmentClick} className="bg-destructive hover:bg-red-700 cursor-pointer">
+                                            <Trash2 className="mr-1" />
                                             Excluir
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
@@ -408,20 +404,20 @@ const UpsertAppointmentForm = ({
                             {upsertAppointmentAction.isPending
                                 ? (
                                     <>
-                                        <SaveIcon className="h-4 w-4 mr-2" />
+                                        <SaveIcon className="h-4 w-4" />
                                         Salvando...
                                     </>
                                 )
                                 : appointment
                                     ? (
                                         <>
-                                            <SaveIcon className="h-4 w-4 mr-2" />
+                                            <SaveIcon className="h-4 w-4" />
                                             Atualizar
                                         </>
                                     )
                                     : (
                                         <>
-                                            <SaveIcon className="h-4 w-4 mr-2" />
+                                            <SaveIcon className="h-4 w-4" />
                                             Adicionar
                                         </>
                                     )
