@@ -40,7 +40,13 @@ const PatientsPage = async () => {
                 </PageActions>
             </PageHeader>
             <PageContent>
-                <DataTable columns={patientsTableColumns} data={patients} />
+                {patients.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-10">
+                        <p className="text-muted-foreground text-lg">Nenhum paciente cadastrado.</p>
+                    </div>
+                ) : (
+                    <DataTable columns={patientsTableColumns} data={patients} />
+                )}
             </PageContent>
         </PageContainer>
     );
