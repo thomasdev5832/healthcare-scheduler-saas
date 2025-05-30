@@ -78,6 +78,7 @@ const UpsertAppointmentForm = ({
 }: UpsertAppointmentFormProps) => {
     const [selectedDoctor, setSelectedDoctor] = useState<typeof doctorsTable.$inferSelect | null>(null);
     const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
     // Função para extrair o horário de uma data
     const extractTimeSlot = (date: Date): string => {
@@ -285,7 +286,7 @@ const UpsertAppointmentForm = ({
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
                                 <FormLabel>Data</FormLabel>
-                                <Popover>
+                                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                                     <PopoverTrigger asChild disabled={!watchDoctorId || !watchPatientId}>
                                         <FormControl>
                                             <Button
@@ -309,9 +310,21 @@ const UpsertAppointmentForm = ({
                                         <Calendar
                                             mode="single"
                                             selected={field.value}
-                                            onSelect={field.onChange}
+                                            onSelect={(date) => {
+                                                field.onChange(date);
+                                                setIsCalendarOpen(false);
+                                            }}
                                             initialFocus
                                             locale={ptBR}
+                                            fromDate={new Date()}
+                                            disabled={(date) => {
+                                                if (selectedDoctor) {
+                                                    const dayOfWeek = dayjs(date).day();
+                                                    return dayOfWeek < selectedDoctor.availableFromWeekDay ||
+                                                        dayOfWeek > selectedDoctor.availableToWeekDay;
+                                                }
+                                                return false;
+                                            }}
                                         />
                                     </PopoverContent>
                                 </Popover>

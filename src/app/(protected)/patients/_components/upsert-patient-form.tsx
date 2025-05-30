@@ -221,20 +221,20 @@ const UpsertPatientForm = ({ patient, onSuccess, isOpen }: UpsertPatientFormProp
                             {upsertPatientAction.isPending
                                 ? (
                                     <>
-                                        <SaveIcon className="mr-2 h-4 w-4" />
+                                        <SaveIcon className="h-4 w-4" />
                                         Salvando...
                                     </>
                                 )
                                 : patient
                                     ? (
                                         <>
-                                            <SaveIcon className="mr-2 h-4 w-4" />
+                                            <SaveIcon className="h-4 w-4" />
                                             Atualizar
                                         </>
                                     )
                                     : (
                                         <>
-                                            <SaveIcon className="mr-2 h-4 w-4" />
+                                            <SaveIcon className="h-4 w-4" />
                                             Adicionar
                                         </>
                                     )
