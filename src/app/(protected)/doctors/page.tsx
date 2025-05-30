@@ -37,11 +37,17 @@ const DoctorsPage = async () => {
                 </PageActions>
             </PageHeader>
             <PageContent>
-                <div className="grid grid-cols-3 gap-6">
-                    {doctors.map((doctor) => (
-                        <DoctorCard key={doctor.id} doctor={doctor} />
-                    ))}
-                </div>
+                {doctors.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-10">
+                        <p className="text-muted-foreground text-lg">Nenhum médico cadastrado.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-3 gap-6">
+                        {doctors.map((doctor) => (
+                            <DoctorCard key={doctor.id} doctor={doctor} />
+                        ))}
+                    </div>
+                )}
             </PageContent>
         </PageContainer>
     );

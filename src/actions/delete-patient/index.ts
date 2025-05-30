@@ -29,6 +29,18 @@ export const deletePatient = actionClient
       throw new Error("Clinic not found");
     }
 
+    const patient = await db.query.patientsTable.findFirst({
+      where: eq(patientsTable.id, parsedInput.id),
+    });
+
+    if (!patient) {
+      throw new Error("Paciente não encontrado");
+    }
+
+    if (patient.clinicId !== session.user.clinic.id) {
+      throw new Error("Paciente não encontrado");
+    }
+
     await db.delete(patientsTable).where(eq(patientsTable.id, parsedInput.id));
 
     revalidatePath("/patients");
