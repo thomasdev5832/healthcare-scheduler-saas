@@ -55,7 +55,7 @@ export const patientsTableColumns: ColumnDef<Patient>[] = [
             return (
                 <DropdownMenu>
 
-                    <DropdownMenuTrigger>
+                    <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
                             <Grip className="w-4 h-4" />
                         </Button>
