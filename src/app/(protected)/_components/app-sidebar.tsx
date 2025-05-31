@@ -1,12 +1,13 @@
 "use client"
 
-import { CalendarHeart, HeartPulse, LayoutDashboard, LogOut, Stethoscope, UsersRound } from "lucide-react"
+import { CalendarHeart, Crown, HeartPulse, LayoutDashboard, LogOut, Settings, Stethoscope, UsersRound } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Separator } from "@/components/ui/separator"
 import {
     Sidebar,
     SidebarContent,
@@ -80,6 +81,25 @@ export function AppSidebar() {
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+                <Separator />
+                <SidebarGroup>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton>
+                                    <Crown />
+                                    Planos
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton>
+                                    <Settings />
+                                    Configurações
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
