@@ -77,7 +77,7 @@ export const getAvailableTimes = actionClient
 
       return (
         date.format("HH:mm:ss") >= doctorAvailableFrom.format("HH:mm:ss") &&
-        date.format("HH:mm:ss") <= doctorAvailableTo.format("HH:mm:ss")
+        date.format("HH:mm:ss") < doctorAvailableTo.format("HH:mm:ss")
       );
     });
     return doctorTimeSlots.map((time) => {

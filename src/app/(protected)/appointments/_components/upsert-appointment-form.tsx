@@ -323,7 +323,7 @@ const UpsertAppointmentForm = ({
                                                 )}
                                                 disabled={!watchDoctorId || !watchPatientId}
                                             >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                <CalendarIcon className="h-4 w-4" />
                                                 {field.value ? (
                                                     format(field.value, "PPP", { locale: ptBR })
                                                 ) : (
