@@ -86,6 +86,7 @@ export function AppSidebar() {
                 </SidebarGroup>
                 <Separator />
                 <SidebarGroup>
+                    <SidebarGroupLabel>Outros</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             <SidebarMenuItem>

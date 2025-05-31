@@ -181,6 +181,7 @@ const UpsertAppointmentForm = ({
     const isLoadingOrFetching = isLoadingTimeSlots || isFetchingTimeSlots;
     const availableSlots = availableTimeSlots.filter((slot: TimeSlot) => slot.available);
     const hasAvailableSlots = availableSlots.length > 0;
+    const hasTimeSlots = availableTimeSlots.length > 0;
 
     return (
         <DialogContent>
@@ -348,7 +349,7 @@ const UpsertAppointmentForm = ({
                                 <Select
                                     onValueChange={field.onChange}
                                     value={field.value}
-                                    disabled={!watchDoctorId || !watchPatientId || !watchDate || !hasAvailableSlots || isLoadingOrFetching}
+                                    disabled={!watchDoctorId || !watchPatientId || !watchDate || !hasTimeSlots || isLoadingOrFetching}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-full">
@@ -360,32 +361,41 @@ const UpsertAppointmentForm = ({
                                             <div className="p-2 text-center text-sm text-muted-foreground">
                                                 Carregando horários disponíveis...
                                             </div>
-                                        ) : !hasAvailableSlots && watchDate ? (
+                                        ) : !hasTimeSlots && watchDate ? (
                                             <div className="p-2 text-center text-sm text-muted-foreground">
-                                                Não há horários disponíveis para esta data.
+                                                Não há horários para esta data.
                                             </div>
                                         ) : !watchDate ? (
                                             <div className="p-2 text-center text-sm text-muted-foreground">
                                                 Selecione uma data primeiro.
                                             </div>
                                         ) : (
-                                            availableSlots.map((timeSlot: TimeSlot) => (
-                                                <SelectItem key={timeSlot.value} value={timeSlot.value}>
+                                            availableTimeSlots.map((timeSlot: TimeSlot) => (
+                                                <SelectItem
+                                                    key={timeSlot.value}
+                                                    value={timeSlot.value}
+                                                    disabled={!timeSlot.available}
+                                                >
                                                     <div className="flex items-center">
                                                         <Clock className="mr-2 h-4 w-4" />
                                                         {timeSlot.label}
+                                                        {!timeSlot.available && (
+                                                            <span className="ml-2 text-xs">
+                                                                (Indisponível)
+                                                            </span>
+                                                        )}
                                                     </div>
                                                 </SelectItem>
                                             ))
                                         )}
                                     </SelectContent>
                                 </Select>
+                                <FormMessage />
                                 {watchDate && !hasAvailableSlots && !isLoadingOrFetching && (
                                     <div className="text-sm text-destructive mt-2">
-                                        Não há horários disponíveis para esta data.
+                                        Todos os horários desta data estão ocupados.
                                     </div>
                                 )}
-                                <FormMessage />
                             </FormItem>
                         )}
                     />
