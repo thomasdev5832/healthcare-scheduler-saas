@@ -14,8 +14,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { deleteAppointment } from "@/actions/delete-appointment";
+import { getAvailableTimes } from "@/actions/get-available-times";
 import { upsertAppointment } from "@/actions/upsert-appointment";
-import { generateTimeSlots } from "@/app/(protected)/appointments/_helpers/generate-time-slots";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -77,7 +77,7 @@ const UpsertAppointmentForm = ({
     isOpen
 }: UpsertAppointmentFormProps) => {
     const [selectedDoctor, setSelectedDoctor] = useState<typeof doctorsTable.$inferSelect | null>(null);
-    const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
+    const [availableTimeSlots, setAvailableTimeSlots] = useState<{ value: string; available: boolean; label: string }[]>([]);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
     // Função para extrair o horário de uma data
@@ -117,21 +117,47 @@ const UpsertAppointmentForm = ({
         }
     }, [watchDoctorId, doctors, form]);
 
-    // Atualiza os horários disponíveis quando a data ou o médico mudam
-    useEffect(() => {
-        if (watchDate && selectedDoctor) {
-            const timeSlots = generateTimeSlots(selectedDoctor, watchDate);
-            setAvailableTimeSlots(timeSlots);
+    // Buscando horários disponíveis usando o server action getAvailableTimes
+    const getAvailableTimesAction = useAction(getAvailableTimes, {
+        onSuccess: (response) => {
+            console.log("getAvailableTimes success:", response);
+            setAvailableTimeSlots(response.data || []);
 
             // Limpa o horário selecionado se não estiver mais disponível
             const currentTimeSlot = form.getValues("timeSlot");
-            if (currentTimeSlot && !timeSlots.includes(currentTimeSlot)) {
+            if (currentTimeSlot && response.data && !response.data.find((slot) => slot.value === currentTimeSlot && slot.available)) {
                 form.setValue("timeSlot", "");
             }
-        } else {
+        },
+        onError: (error) => {
+            console.error("getAvailableTimes error:", error);
+            toast.error("Erro ao buscar horários disponíveis: " + error.error);
             setAvailableTimeSlots([]);
+        },
+    });
+
+    // Atualiza os horários disponíveis quando a data ou o médico mudam
+    useEffect(() => {
+        // Limpa os horários disponíveis quando um dos valores necessários não está presente
+        if (!watchDate || !watchDoctorId) {
+            console.log("Clearing available time slots");
+            setAvailableTimeSlots([]);
+            return;
         }
-    }, [watchDate, selectedDoctor, form]);
+
+        // Quando o médico muda, mas já temos uma data selecionada, busca os horários
+        if (watchDate && watchDoctorId && selectedDoctor?.id !== watchDoctorId) {
+            console.log("Doctor changed, fetching new available times");
+            const fetchTimes = async () => {
+                getAvailableTimesAction.execute({
+                    doctorId: watchDoctorId,
+                    date: dayjs(watchDate).format("YYYY-MM-DD")
+                });
+            };
+            fetchTimes();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [watchDate, watchDoctorId, selectedDoctor]);
 
     // Reseta o formulário quando o diálogo é fechado
     useEffect(() => {
@@ -313,6 +339,15 @@ const UpsertAppointmentForm = ({
                                             onSelect={(date) => {
                                                 field.onChange(date);
                                                 setIsCalendarOpen(false);
+
+                                                // Busca horários disponíveis diretamente quando seleciona a data
+                                                if (date && watchDoctorId) {
+                                                    console.log("Calendar onSelect triggered for date:", date);
+                                                    getAvailableTimesAction.execute({
+                                                        doctorId: watchDoctorId,
+                                                        date: dayjs(date).format("YYYY-MM-DD")
+                                                    });
+                                                }
                                             }}
                                             initialFocus
                                             locale={ptBR}
@@ -339,33 +374,53 @@ const UpsertAppointmentForm = ({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Horário</FormLabel>
+                                {getAvailableTimesAction.isPending && (
+                                    <div className="text-sm text-muted-foreground mb-2">
+                                        Carregando horários disponíveis...
+                                    </div>
+                                )}
                                 <Select
                                     onValueChange={field.onChange}
                                     value={field.value}
-                                    disabled={!watchDoctorId || !watchPatientId || !watchDate || availableTimeSlots.length === 0}
+                                    disabled={!watchDoctorId || !watchPatientId || !watchDate || availableTimeSlots.length === 0 || getAvailableTimesAction.isPending}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Selecione um horário" />
+                                            <SelectValue placeholder={getAvailableTimesAction.isPending ? "Carregando horários..." : "Selecione um horário"} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {availableTimeSlots.length === 0 ? (
+                                        {getAvailableTimesAction.isPending ? (
                                             <div className="p-2 text-center text-sm text-muted-foreground">
-                                                {watchDate ? "Não há horários disponíveis para esta data." : "Selecione uma data primeiro."}
+                                                Carregando horários disponíveis...
+                                            </div>
+                                        ) : availableTimeSlots.length === 0 && watchDate ? (
+                                            <div className="p-2 text-center text-sm text-muted-foreground">
+                                                Não há horários disponíveis para esta data.
+                                            </div>
+                                        ) : availableTimeSlots.length === 0 ? (
+                                            <div className="p-2 text-center text-sm text-muted-foreground">
+                                                Selecione uma data primeiro.
                                             </div>
                                         ) : (
-                                            availableTimeSlots.map((timeSlot) => (
-                                                <SelectItem key={timeSlot} value={timeSlot}>
-                                                    <div className="flex items-center">
-                                                        <Clock className="mr-2 h-4 w-4" />
-                                                        {timeSlot}
-                                                    </div>
-                                                </SelectItem>
-                                            ))
+                                            availableTimeSlots
+                                                .filter(slot => slot.available)
+                                                .map((timeSlot) => (
+                                                    <SelectItem key={timeSlot.value} value={timeSlot.value}>
+                                                        <div className="flex items-center">
+                                                            <Clock className="mr-2 h-4 w-4" />
+                                                            {timeSlot.label}
+                                                        </div>
+                                                    </SelectItem>
+                                                ))
                                         )}
                                     </SelectContent>
                                 </Select>
+                                {watchDate && availableTimeSlots.filter(slot => slot.available).length === 0 && !getAvailableTimesAction.isPending && (
+                                    <div className="text-sm text-destructive mt-2">
+                                        Não há horários disponíveis para esta data.
+                                    </div>
+                                )}
                                 <FormMessage />
                             </FormItem>
                         )}
