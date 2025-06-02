@@ -119,25 +119,25 @@ export const appointmentsTableColumns: ColumnDef<Appointment>[] = [
                     label: "Agendado",
                     icon: Clock2,
                     variant: "outline" as const,
-                    className: ""
+                    className: "border-primary/50 bg-primary/10 text-blue-400"
                 },
                 completed: {
                     label: "Concluído",
                     icon: CheckCircle2,
                     variant: "outline" as const,
-                    className: "border-green-200"
+                    className: "border-green-300 bg-green-100 text-green-600"
                 },
                 canceled: {
                     label: "Cancelado",
                     icon: XCircle,
                     variant: "outline" as const,
-                    className: "border-red-200"
+                    className: "border-red-200 bg-red-100 text-red-600"
                 },
                 no_show: {
                     label: "Não Compareceu",
                     icon: AlertCircle,
                     variant: "outline" as const,
-                    className: "border-amber-200"
+                    className: "border-amber-200 bg-amber-100 text-amber-600"
                 }
             };
 
@@ -151,10 +151,10 @@ export const appointmentsTableColumns: ColumnDef<Appointment>[] = [
                         className={cn("flex items-center gap-1", config.className)}
                     >
                         <Icon className={cn("h-3 w-3", {
-                            "text-muted-foreground": status === "scheduled",
-                            "text-green-500": status === "completed",
+                            "text-primary": status === "scheduled",
+                            "text-green-600": status === "completed",
                             "text-destructive": status === "canceled",
-                            "text-amber-500": status === "no_show"
+                            "text-amber-600": status === "no_show"
                         })} />
                         <span>{config.label}</span>
                     </Badge>

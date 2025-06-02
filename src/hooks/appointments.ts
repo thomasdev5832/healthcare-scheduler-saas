@@ -49,6 +49,10 @@ export function useAvailableTimes(
       }
     },
     enabled,
+    // Configurações para garantir dados sempre atualizados
+    staleTime: 0, // Considera os dados obsoletos imediatamente
+    refetchOnMount: true, // Recarrega os dados sempre que o componente for montado
+    refetchOnWindowFocus: true, // Recarrega os dados quando a janela receber foco
   });
 }
 

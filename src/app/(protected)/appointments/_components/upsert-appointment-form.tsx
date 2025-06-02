@@ -491,7 +491,7 @@ const UpsertAppointmentForm = ({
                                     <SelectContent>
                                         <SelectItem value="scheduled" className="flex items-center">
                                             <div className="flex items-center">
-                                                <Clock2 className="mr-2 h-4 w-4 text-muted-foreground" />
+                                                <Clock2 className="mr-2 h-4 w-4 text-primary" /> {/* alterado para azul primary */}
                                                 Agendado
                                             </div>
                                         </SelectItem>
@@ -579,4 +579,4 @@ const UpsertAppointmentForm = ({
     );
 };
 
-export default UpsertAppointmentForm; 
+export default UpsertAppointmentForm;
