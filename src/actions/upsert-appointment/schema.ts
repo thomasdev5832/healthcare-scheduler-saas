@@ -17,6 +17,11 @@ export const upsertAppointmentSchema = z.object({
   appointmentPriceInCents: z.number().min(1, {
     message: "Valor da consulta é obrigatório.",
   }),
+  status: z
+    .enum(["scheduled", "completed", "canceled", "no_show"], {
+      required_error: "Status é obrigatório.",
+    })
+    .default("scheduled"),
 });
 
 export type UpsertAppointmentSchema = z.infer<typeof upsertAppointmentSchema>;

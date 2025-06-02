@@ -18,8 +18,15 @@ dayjs.extend(utc);
 export const upsertAppointment = actionClient
   .schema(upsertAppointmentSchema)
   .action(async ({ parsedInput }) => {
-    const { id, patientId, doctorId, date, timeSlot, appointmentPriceInCents } =
-      parsedInput;
+    const {
+      id,
+      patientId,
+      doctorId,
+      date,
+      timeSlot,
+      appointmentPriceInCents,
+      status,
+    } = parsedInput;
 
     // Combina a data e o horário em um único timestamp
     const [hours, minutes] = timeSlot.split(":").map(Number);
@@ -53,6 +60,7 @@ export const upsertAppointment = actionClient
         date: appointmentDate,
         appointmentPriceInCents,
         clinicId: session.user.clinic.id,
+        status,
       })
       .onConflictDoUpdate({
         target: [appointmentsTable.id],
@@ -61,6 +69,7 @@ export const upsertAppointment = actionClient
           doctorId,
           date: appointmentDate,
           appointmentPriceInCents,
+          status,
         },
       });
 
