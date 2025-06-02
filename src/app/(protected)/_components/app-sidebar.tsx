@@ -1,7 +1,7 @@
 "use client"
 
-import { CalendarHeart, Crown, HeartPulse, LayoutDashboard, LogOut, Settings, Stethoscope, UsersRound } from "lucide-react"
-import Image from "next/image"
+import { CalendarHeart, Gem, HeartPulse, LayoutDashboard, LogOut, Settings, Stethoscope, UsersRound } from "lucide-react"
+//import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
@@ -64,7 +64,16 @@ export function AppSidebar() {
     return (
         <Sidebar>
             <SidebarHeader className="p-4 border-b border-b-gray-200 flex items-start justify-center">
-                <Image src={"/logo.svg"} alt="Logo" width={140} height={40} />
+                <div className="flex items-center">
+                    <Stethoscope className="inline-block mr-2 text-primary" />
+                    <p className="text-2xl" >Pequi<span className="text-2xl text-center text-primary font-bold" >
+                        Med
+                    </span></p>
+
+
+                </div>
+
+
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
@@ -90,9 +99,15 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton>
-                                    <Crown />
-                                    Planos
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={pathname === "/subscriptions-page"}
+                                    onClick={() => router.push("/subscriptions-page")}
+                                >
+                                    <Link href="/subscriptions-page">
+                                        <Gem />
+                                        <span>Assinatura</span>
+                                    </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                             <SidebarMenuItem>
