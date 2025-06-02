@@ -106,8 +106,11 @@ const AppointmentsPageActions = ({ appointment }: AppointmentsPageActionsProps) 
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setIsOpen(true)}>
+
+                    <DropdownMenuItem
+                        onClick={() => setIsOpen(true)}
+                        className="cursor-pointer"
+                    >
                         <Edit className="h-4 w-4 mr-2" />
                         Editar agendamento
                     </DropdownMenuItem>
@@ -122,7 +125,7 @@ const AppointmentsPageActions = ({ appointment }: AppointmentsPageActionsProps) 
                                 key={status}
                                 disabled={isCurrentStatus}
                                 className={cn(
-                                    "flex items-center gap-2",
+                                    "flex items-center gap-2 cursor-pointer",
                                     isCurrentStatus && "font-medium"
                                 )}
                                 onClick={() => handleStatusUpdate(status as AppointmentStatus)}
