@@ -44,6 +44,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
           eq(appointmentsTable.clinicId, session.user.clinic.id),
           gte(appointmentsTable.date, new Date(from)),
           lte(appointmentsTable.date, new Date(to)),
+          eq(appointmentsTable.status, "completed"), // <-- SOMENTE CONCLUÍDOS
         ),
       ),
     db

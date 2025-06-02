@@ -70,8 +70,8 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         <PageContainer>
             <PageHeader>
                 <PageHeaderContent>
-                    <PageTitle><span className="font-medium text-primary">{clinic?.name}</span></PageTitle>
-                    <PageDescription>Visualize os dados e estatísticas da sua clínica.</PageDescription>
+                    <PageTitle><span className="font-medium text-primary">Clínica {clinic?.name}</span></PageTitle>
+                    <PageDescription>Acompanhe estatísticas e informações importantes da sua clínica tempo real.</PageDescription>
                 </PageHeaderContent>
                 <PageActions>
                     <DatePicker />

@@ -19,6 +19,7 @@ import {
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TopSpecialtiesProps {
     topSpecialties: {
@@ -57,47 +58,56 @@ export default function TopSpecialties({
     const maxAppointments = Math.max(
         ...topSpecialties.map((i) => i.appointments),
     );
+    const totalAppointments = topSpecialties.reduce((acc, curr) => acc + curr.appointments, 0);
     return (
         <Card className="mx-auto w-full">
-            <CardContent>
-                <div className="mb-6 flex items-center justify-between">
+            <CardContent className="pb-4">
+                <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Hospital className="h-4 w-4 text-muted-foreground" />
                         <CardTitle className="text-sm">Especialidades</CardTitle>
                     </div>
                 </div>
-
-                {/* specialtys List */}
-                <div className="space-y-4">
-                    {topSpecialties.map((specialty) => {
-                        const Icon = getSpecialtyIcon(specialty.specialty);
-                        // Porcentagem de ocupação da especialidade baseando-se no maior número de agendamentos
-                        const progressValue =
-                            (specialty.appointments / maxAppointments) * 100;
-
-                        return (
-                            <div
-                                key={specialty.specialty}
-                                className="flex items-center gap-2"
-                            >
-                                <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full">
-                                    <Icon className="text-primary h-4 w-4" />
-                                </div>
-                                <div className="flex w-full flex-col justify-center gap-1">
-                                    <div className="flex w-full justify-between">
-                                        <h3 className="text-xs font-medium">{specialty.specialty}</h3>
-                                        <div className="text-right">
-                                            <span className="text-muted-foreground text-xs flex items-center gap-1">
-                                                {specialty.appointments} <CalendarDays className="h-3 w-3" />
-                                            </span>
+                <TooltipProvider>
+                    <div className="space-y-3">
+                        {topSpecialties.map((specialty) => {
+                            const Icon = getSpecialtyIcon(specialty.specialty);
+                            const progressValue =
+                                (specialty.appointments / maxAppointments) * 100;
+                            const percentOfTotal = ((specialty.appointments / totalAppointments) * 100).toFixed(1);
+                            return (
+                                <Tooltip key={specialty.specialty}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center gap-3 cursor-pointer">
+                                            <div className="bg-primary/10 flex h-7 w-7 items-center justify-center rounded-full">
+                                                <Icon className="text-primary h-4 w-4" />
+                                            </div>
+                                            <div className="flex w-full flex-col justify-center gap-0.5">
+                                                <div className="flex w-full justify-between items-center">
+                                                    <h3 className="text-xs font-medium truncate max-w-[8rem]">{specialty.specialty}</h3>
+                                                    <div className="text-right flex items-center gap-1 min-w-[4.5rem] justify-end">
+                                                        <span className="text-muted-foreground text-xs flex items-center gap-1">
+                                                            {specialty.appointments} <CalendarDays className="h-3 w-3" />
+                                                        </span>
+                                                        <span className="ml-1 text-xs text-primary font-semibold">{percentOfTotal}%</span>
+                                                    </div>
+                                                </div>
+                                                <Progress value={progressValue} className="w-full h-1" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <Progress value={progressValue} className="w-full h-1.5" />
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="font-medium">{specialty.specialty}</span>
+                                            <span>Agendamentos: {specialty.appointments}</span>
+                                            <span>Participação: {percentOfTotal}%</span>
+                                        </div>
+                                    </TooltipContent>
+                                </Tooltip>
+                            );
+                        })}
+                    </div>
+                </TooltipProvider>
             </CardContent>
         </Card>
     );

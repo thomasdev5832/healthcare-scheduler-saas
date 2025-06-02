@@ -54,6 +54,12 @@ export function AppointmentsChart({ dailyAppointmentsData }: RevenueChartProps) 
         },
     } satisfies ChartConfig;
 
+    // Calcular faturamento total e média apenas para os dias exibidos no gráfico
+    const chartRevenueTotal = chartData.reduce((acc, d) => acc + d.revenue, 0);
+    const chartRevenueAvg = chartData.length > 0 ? chartRevenueTotal / chartData.length : 0;
+    // Calcular maior número de agendamentos e média diária para os dias exibidos
+    const chartAppointmentsMax = Math.max(...chartData.map(d => d.appointments));
+    const chartAppointmentsAvg = chartData.length > 0 ? chartData.reduce((acc, d) => acc + d.appointments, 0) / chartData.length : 0;
 
     return (
         <Card>
@@ -147,6 +153,49 @@ export function AppointmentsChart({ dailyAppointmentsData }: RevenueChartProps) 
                         />
                     </AreaChart>
                 </ChartContainer>
+                {/* Insights Section */}
+                <div className="mt-6 border-t pt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Coluna 1: Insights de Agendamentos */}
+                    <div>
+                        <h4 className="text-xs font-semibold mb-2 text-muted-foreground flex items-center gap-1">
+                            <DollarSign className="h-3.5 w-3.5 text-primary" /> Insights de Agendamentos
+                        </h4>
+                        <ul className="text-xs text-muted-foreground space-y-1">
+                            <li>
+                                Maior número de agendamentos em um dia: {chartAppointmentsMax}
+                            </li>
+                            <li>
+                                Média diária de agendamentos: {chartAppointmentsAvg.toFixed(1)}
+                            </li>
+                            <li>
+                                Menor número de agendamentos em um dia: {Math.min(...chartData.map(d => d.appointments))}
+                            </li>
+                            <li>
+                                Dias sem agendamentos: {chartData.filter(d => d.appointments === 0).length}
+                            </li>
+                        </ul>
+                    </div>
+                    {/* Coluna 2: Insights de Faturamento */}
+                    <div>
+                        <h4 className="text-xs font-semibold mb-2 text-muted-foreground flex items-center gap-1">
+                            <DollarSign className="h-3.5 w-3.5 text-green-600" /> Insights de Faturamento
+                        </h4>
+                        <ul className="text-xs text-muted-foreground space-y-1">
+                            <li>
+                                Média diária de faturamento: {formatCurrencyInCents(chartRevenueAvg)}
+                            </li>
+                            <li>
+                                Maior faturamento em um dia: {formatCurrencyInCents(Math.max(...chartData.map(d => d.revenue)))}
+                            </li>
+                            <li>
+                                Menor faturamento em um dia: {formatCurrencyInCents(Math.min(...chartData.map(d => d.revenue)))}
+                            </li>
+                            <li>
+                                Dias sem faturamento: {chartData.filter(d => d.revenue === 0).length}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </CardContent>
         </Card>
     )
