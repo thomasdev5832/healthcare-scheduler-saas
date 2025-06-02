@@ -1,4 +1,4 @@
-import { CalendarIcon, DollarSignIcon, UserRoundIcon, UsersIcon } from "lucide-react";
+import { CalendarDays, DollarSignIcon, Stethoscope, UsersIcon } from "lucide-react";
 
 interface StatsCardsProps {
     totalRevenue: number | null;
@@ -35,7 +35,7 @@ const StatsCards = ({
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div className="p-4 flex flex-col gap-y-2">
                     <div className="flex items-center gap-x-2">
-                        <CalendarIcon className="h-4 w-4 text-blue-500" />
+                        <CalendarDays className="h-4 w-4 text-blue-500" />
                         <span className="text-sm text-muted-foreground">Agendamentos</span>
                     </div>
                     <span className="text-xl font-bold">
@@ -59,7 +59,7 @@ const StatsCards = ({
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div className="p-4 flex flex-col gap-y-2">
                     <div className="flex items-center gap-x-2">
-                        <UserRoundIcon className="h-4 w-4 text-blue-500" />
+                        <Stethoscope className="h-4 w-4 text-blue-500" />
                         <span className="text-sm text-muted-foreground">Médicos</span>
                     </div>
                     <span className="text-xl font-bold">
