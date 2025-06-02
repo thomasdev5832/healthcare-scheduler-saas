@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
 import { db } from "@/db";
-import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
+import { appointmentsTable, clinicsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import { AppointmentsChart } from "./_components/appointments-chart";
@@ -39,6 +39,14 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
             `/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(1, "month").format("YYYY-MM-DD")}`,
         );
     }
+
+    // Formatação do range de datas para exibição
+    const formattedDateRange = `${dayjs(from).format("DD/MM/YYYY")} até ${dayjs(to).format("DD/MM/YYYY")}`;
+
+    const [clinic] = await db
+        .select()
+        .from(clinicsTable)
+        .where(eq(clinicsTable.id, session.user.clinic.id));
 
     const [
         [totalRevenue],
@@ -115,8 +123,8 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         <PageContainer>
             <PageHeader>
                 <PageHeaderContent>
-                    <PageTitle>Dashboard</PageTitle>
-                    <PageDescription>Visualize os dados da sua clínica.</PageDescription>
+                    <PageTitle><span className="font-medium text-primary">{clinic?.name}</span></PageTitle>
+                    <PageDescription>Visualize os dados e estatísticas da sua clínica.</PageDescription>
                 </PageHeaderContent>
                 <PageActions>
                     <DatePicker />
@@ -128,6 +136,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
                     totalAppointments={totalAppointments.total}
                     totalPatients={totalPatients.total}
                     totalDoctors={totalDoctors.total}
+                    dateRange={formattedDateRange}
                 />
                 <div className="grid grid-cols-[2.25fr_1fr] gap-4">
                     <div>

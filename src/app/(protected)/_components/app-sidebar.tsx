@@ -70,13 +70,13 @@ export function AppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenu>
+                        <SidebarMenu className="flex flex-col gap-y-2">
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild isActive={pathname === item.url}>
-                                        <Link href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
+                                        <Link href={item.url} className={pathname === item.url ? "text-primary font-medium" : ""}>
+                                            <item.icon className={pathname === item.url ? "text-primary" : ""} />
+                                            <span className={pathname === item.url ? "text-primary" : ""}>{item.title}</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
