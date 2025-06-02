@@ -6,7 +6,7 @@ import { ptBR } from "date-fns/locale";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { AlertCircle, Calendar as CalendarIcon, CalendarPlus, CheckCircle2, Clock, Clock2, SaveIcon, Trash2, TriangleAlert, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
@@ -85,27 +85,42 @@ const UpsertAppointmentForm = ({
 }: UpsertAppointmentFormProps) => {
     const [selectedDoctor, setSelectedDoctor] = useState<typeof doctorsTable.$inferSelect | null>(null);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const [currentAppointmentTimeSlot, setCurrentAppointmentTimeSlot] = useState<string | null>(null);
 
     // Função para extrair o horário de uma data
     const extractTimeSlot = (date: Date): string => {
-        // Primeiro converte para UTC (como está armazenado) e depois extrai o horário local
         return dayjs(date).format("HH:mm");
     };
+
+    // Inicializa o formulário com valores padrão
+    const defaultValues = useMemo(() => ({
+        patientId: appointment?.patientId ?? "",
+        doctorId: appointment?.doctorId ?? "",
+        date: appointment?.date ? new Date(appointment.date) : new Date(),
+        timeSlot: appointment?.date ? extractTimeSlot(new Date(appointment.date)) : "",
+        appointmentPrice: appointment?.appointmentPriceInCents
+            ? appointment.appointmentPriceInCents / 100
+            : 0,
+        status: appointment?.status ?? "scheduled",
+    }), [appointment]);
 
     const form = useForm<FormValues>({
         // @ts-expect-error - Resolver type issues
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            patientId: appointment?.patientId ?? "",
-            doctorId: appointment?.doctorId ?? "",
-            date: appointment?.date ? new Date(appointment.date) : new Date(),
-            timeSlot: appointment?.date ? extractTimeSlot(appointment.date) : "",
-            appointmentPrice: appointment?.appointmentPriceInCents
-                ? appointment.appointmentPriceInCents / 100
-                : 0,
-            status: appointment?.status ?? "scheduled",
-        },
+        defaultValues,
     });
+
+    // Reseta o formulário quando o appointment ou isOpen mudam
+    useEffect(() => {
+        if (isOpen) {
+            form.reset(defaultValues);
+
+            if (appointment?.date) {
+                const timeSlot = extractTimeSlot(new Date(appointment.date));
+                setCurrentAppointmentTimeSlot(timeSlot);
+            }
+        }
+    }, [form, defaultValues, appointment, isOpen]);
 
     const watchDoctorId = form.watch("doctorId");
     const watchPatientId = form.watch("patientId");
@@ -120,6 +135,69 @@ const UpsertAppointmentForm = ({
         isFetching: isFetchingTimeSlots
     } = useAvailableTimes(watchDoctorId, watchDate);
 
+    // Reseta o campo de horário quando a data é alterada
+    useEffect(() => {
+        // Verifica se a data atual é diferente da data original do agendamento
+        if (appointment?.date) {
+            const originalDate = dayjs(appointment.date).format('YYYY-MM-DD');
+            const currentDate = dayjs(watchDate).format('YYYY-MM-DD');
+
+            // Se a data foi alterada, limpa o campo de horário e remove o indicador de horário atual
+            if (originalDate !== currentDate) {
+                form.setValue("timeSlot", "");
+                setCurrentAppointmentTimeSlot(null); // Limpa o horário atual quando a data é alterada
+            } else {
+                // Se voltou para a data original, restaura o horário atual
+                const timeSlot = extractTimeSlot(new Date(appointment.date));
+                setCurrentAppointmentTimeSlot(timeSlot);
+            }
+        }
+    }, [watchDate, appointment, form, extractTimeSlot]);
+
+    // Processa os slots de tempo para incluir o horário atual do agendamento
+    const customTimeSlots = useMemo(() => {
+        if (!availableTimeSlots) {
+            return availableTimeSlots;
+        }
+
+        // Se não estiver na data original ou não tiver um horário atual, retorna os slots normais
+        if (!currentAppointmentTimeSlot || !appointment) {
+            return availableTimeSlots;
+        }
+
+        // Verifica se o horário atual existe na lista
+        const currentTimeSlotExists = availableTimeSlots.some(
+            (slot: TimeSlot) => slot.value === currentAppointmentTimeSlot
+        );
+
+        if (!currentTimeSlotExists) {
+            // Se não existir, adiciona à lista
+            const updatedSlots = [
+                ...availableTimeSlots,
+                {
+                    value: currentAppointmentTimeSlot,
+                    available: true,
+                    label: `${currentAppointmentTimeSlot.substring(0, 5)} (Horário atual)`
+                }
+            ];
+
+            // Ordena os horários
+            return updatedSlots.sort((a, b) => a.value.localeCompare(b.value));
+        } else {
+            // Se existir, marca como disponível
+            return availableTimeSlots.map((slot: TimeSlot) => {
+                if (slot.value === currentAppointmentTimeSlot) {
+                    return {
+                        ...slot,
+                        available: true,
+                        label: `${slot.label} (Horário atual)`
+                    };
+                }
+                return slot;
+            });
+        }
+    }, [availableTimeSlots, currentAppointmentTimeSlot, appointment]);
+
     // Atualiza o médico selecionado e o preço da consulta quando o médico é selecionado
     useEffect(() => {
         if (watchDoctorId) {
@@ -132,33 +210,6 @@ const UpsertAppointmentForm = ({
             setSelectedDoctor(null);
         }
     }, [watchDoctorId, doctors, form]);
-
-    // Reseta o formulário quando o diálogo é fechado
-    useEffect(() => {
-        if (!isOpen) {
-            form.reset({
-                patientId: appointment?.patientId ?? "",
-                doctorId: appointment?.doctorId ?? "",
-                date: appointment?.date ? new Date(appointment.date) : new Date(),
-                timeSlot: appointment?.date ? extractTimeSlot(appointment.date) : "",
-                appointmentPrice: appointment?.appointmentPriceInCents
-                    ? appointment.appointmentPriceInCents / 100
-                    : 0,
-                status: appointment?.status ?? "scheduled",
-            });
-        }
-    }, [isOpen, form, appointment]);
-
-    // Limpa o horário selecionado se não estiver mais disponível
-    useEffect(() => {
-        if (!availableTimeSlots || availableTimeSlots.length === 0) return;
-
-        const currentTimeSlot = form.getValues("timeSlot");
-        if (currentTimeSlot && !availableTimeSlots.find((slot: TimeSlot) =>
-            slot.value === currentTimeSlot && slot.available)) {
-            form.setValue("timeSlot", "");
-        }
-    }, [availableTimeSlots, form]);
 
     const handleDeleteAppointmentClick = () => {
         if (!appointment) return;
@@ -191,9 +242,9 @@ const UpsertAppointmentForm = ({
     };
 
     const isLoadingOrFetching = isLoadingTimeSlots || isFetchingTimeSlots;
-    const availableSlots = availableTimeSlots.filter((slot: TimeSlot) => slot.available);
+    const availableSlots = customTimeSlots.filter((slot: TimeSlot) => slot.available);
     const hasAvailableSlots = availableSlots.length > 0;
-    const hasTimeSlots = availableTimeSlots.length > 0;
+    const hasTimeSlots = customTimeSlots.length > 0;
 
     return (
         <DialogContent>
@@ -391,7 +442,7 @@ const UpsertAppointmentForm = ({
                                                 Selecione uma data primeiro.
                                             </div>
                                         ) : (
-                                            availableTimeSlots.map((timeSlot: TimeSlot) => (
+                                            customTimeSlots.map((timeSlot: TimeSlot) => (
                                                 <SelectItem
                                                     key={timeSlot.value}
                                                     value={timeSlot.value}
@@ -412,7 +463,7 @@ const UpsertAppointmentForm = ({
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
-                                {watchDate && !hasAvailableSlots && !isLoadingOrFetching && (
+                                {watchDate && watchDoctorId && !hasAvailableSlots && !isLoadingOrFetching && !currentAppointmentTimeSlot && (
                                     <div className="text-sm text-destructive mt-2">
                                         Todos os horários desta data estão ocupados.
                                     </div>

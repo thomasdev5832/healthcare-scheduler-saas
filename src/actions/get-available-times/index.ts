@@ -51,7 +51,11 @@ export const getAvailableTimes = actionClient
     });
     const appointmentsOnSelectedDate = appointments
       .filter((appointment) => {
-        return dayjs(appointment.date).isSame(parsedInput.date, "day");
+        return (
+          dayjs(appointment.date).isSame(parsedInput.date, "day") &&
+          (appointment.status === "scheduled" ||
+            appointment.status === "completed")
+        );
       })
       .map((appointment) => dayjs(appointment.date).format("HH:mm:ss"));
     const timeSlots = generateTimeSlots();
