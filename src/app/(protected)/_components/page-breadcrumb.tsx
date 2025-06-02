@@ -29,13 +29,30 @@ export function PageBreadcrumb() {
     // Remove barras iniciais e finais e divide o caminho
     const pathSegments = pathname.replace(/^\/|\/$/g, "").split("/");
 
-    // Para o layout protegido, sempre começa com o menu principal
-    const breadcrumbItems: BreadcrumbItem[] = [
-        {
-            href: "/dashboard",
-            label: "Menu Principal",
-        }
-    ];
+    // Inicializa a lista de breadcrumbItems
+    const breadcrumbItems: BreadcrumbItem[] = [];
+
+    // Adiciona o Menu Principal em todas as páginas, incluindo dashboard
+    breadcrumbItems.push({
+        href: "/dashboard",
+        label: "Menu Principal",
+        isCurrent: false, // Nunca será current, pois será sempre o primeiro item
+    });
+
+    // Se estiver na página dashboard, adiciona "Dashboard" como item current
+    if (pathname === "/dashboard") {
+        breadcrumbItems.push({
+            href: "/dashboard?current=true",
+            label: "Dashboard",
+            isCurrent: true,
+        });
+
+        return (
+            <div className="py-3 px-6 border-b bg-muted/30">
+                <Breadcrumb items={breadcrumbItems} className="text-xs" />
+            </div>
+        );
+    }
 
     // Cria o breadcrumb com base nos segmentos de caminho
     let currentPath = "";
@@ -55,8 +72,8 @@ export function PageBreadcrumb() {
         });
     }
 
-    // Se não tiver nenhum item além do Menu Principal, não mostra o breadcrumb
-    if (breadcrumbItems.length <= 1) return null;
+    // Se não tiver nenhum item, não mostra o breadcrumb
+    if (breadcrumbItems.length === 0) return null;
 
     return (
         <div className="py-3 px-6 border-b bg-muted/30">
