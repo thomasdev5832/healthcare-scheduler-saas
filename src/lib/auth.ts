@@ -5,33 +5,41 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import * as schema from "@/db/schema";
-import { usersToClinicsTable } from "@/db/schema";
- 
+import { usersTable, usersToClinicsTable } from "@/db/schema";
+
 export const auth = betterAuth({
-    database: drizzleAdapter(db, {
-    provider: "pg", // or "pg" or "mysql"
-    usePlural: true, // use plural table names
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    usePlural: true,
     schema,
-  }), 
-  socialProviders:{ 
-    google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID as string, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
-        },
+  }),
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
-    plugins: [
+  },
+  plugins: [
     customSession(async ({ user, session }) => {
-      const clinics = await db.query.usersToClinicsTable.findMany({
-        where: eq(usersToClinicsTable.userId, user.id),
-        with: {
-          clinic: true,
-        },
-      });
+      // TODO: colocar cache
+      const [userData, clinics] = await Promise.all([
+        db.query.usersTable.findFirst({
+          where: eq(usersTable.id, user.id),
+        }),
+        db.query.usersToClinicsTable.findMany({
+          where: eq(usersToClinicsTable.userId, user.id),
+          with: {
+            clinic: true,
+            user: true,
+          },
+        }),
+      ]);
       // TODO: Ao adaptar para o usuário ter múltiplas clínicas, deve-se mudar esse código
       const clinic = clinics?.[0];
       return {
         user: {
           ...user,
+          plan: userData?.plan,
           clinic: clinic?.clinicId
             ? {
                 id: clinic?.clinicId,
@@ -43,19 +51,36 @@ export const auth = betterAuth({
       };
     }),
   ],
-    user: {
-        modelName: "usersTable",
+  user: {
+    modelName: "usersTable",
+    additionalFields: {
+      stripeCustomerId: {
+        type: "string",
+        fieldName: "stripeCustomerId",
+        required: false,
+      },
+      stripeSubscriptionId: {
+        type: "string",
+        fieldName: "stripeSubscriptionId",
+        required: false,
+      },
+      plan: {
+        type: "string",
+        fieldName: "plan",
+        required: false,
+      },
     },
-    session: {
-        modelName: "sessionsTable",
-    },
-    account: {
-        modelName: "accountsTable",
-    },
-    verification: {
-        modelName: "verificationsTable",
-    },
-    emailAndPassword: {
-        enabled: true,
-    },
-})
+  },
+  session: {
+    modelName: "sessionsTable",
+  },
+  account: {
+    modelName: "accountsTable",
+  },
+  verification: {
+    modelName: "verificationsTable",
+  },
+  emailAndPassword: {
+    enabled: true,
+  },
+});
