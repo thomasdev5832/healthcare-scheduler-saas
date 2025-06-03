@@ -23,7 +23,7 @@ const AuthenticationPage = async () => {
     return (
         <div className="h-screen flex items-center justify-center flex-col gap-4">
             <div className="flex items-center">
-                <p className="text-3xl font-normal" >
+                <p className="text-4xl font-normal" >
                     Alphon
                     <span className="text-center text-primary font-semibold" >
                         Health

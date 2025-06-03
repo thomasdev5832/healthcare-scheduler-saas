@@ -99,10 +99,9 @@ export function AppSidebar() {
                             <SidebarMenuItem>
                                 <SidebarMenuButton
                                     asChild
-                                    isActive={pathname === "/subscriptions-page"}
-                                    onClick={() => router.push("/subscriptions-page")}
+                                    isActive={pathname === "/subscription"}
                                 >
-                                    <Link href="/subscriptions-page">
+                                    <Link href="/subscription">
                                         <Gem />
                                         <span>Assinatura</span>
                                     </Link>

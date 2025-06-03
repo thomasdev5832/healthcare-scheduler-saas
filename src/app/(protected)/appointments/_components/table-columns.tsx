@@ -82,8 +82,8 @@ export const appointmentsTableColumns: ColumnDef<Appointment>[] = [
 
             return (
                 <div className="flex items-center">
-                    <Clock className={`mr-2 h-4 w-4 ${isPast ? 'text-muted-foreground' : (isNext ? 'text-green-600' : 'text-muted-foreground')}`} />
-                    <span className={timeClass}>{format(new Date(date), "HH:mm", { locale: ptBR })}</span>
+                    <Clock className={`mr-2 h-4 w-4 ${isPast ? 'text-muted-foreground' : (isNext ? 'text-green-600' : 'text-muted-foreground')}`} suppressHydrationWarning />
+                    <span className={timeClass} suppressHydrationWarning>{format(new Date(date), "HH:mm", { locale: ptBR })}</span>
                 </div>
             );
         }
@@ -185,4 +185,4 @@ export const appointmentsTableColumns: ColumnDef<Appointment>[] = [
             );
         }
     }
-]; 
+];
