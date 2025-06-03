@@ -21,7 +21,16 @@ const AuthenticationPage = async () => {
     }
 
     return (
-        <div className="h-screen flex items-center justify-center">
+        <div className="h-screen flex items-center justify-center flex-col gap-4">
+            <div className="flex items-center">
+                <p className="text-3xl font-normal" >
+                    Alphon
+                    <span className="text-center text-primary font-semibold" >
+                        Health
+                    </span>
+                </p>
+            </div>
+            <p className="text-sm text-gray-500">Faça login ou crie uma conta para continuar.</p>
             <Tabs defaultValue="login" className="w-[400px]">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="login">Login</TabsTrigger>
@@ -34,6 +43,7 @@ const AuthenticationPage = async () => {
                     <SignUpForm />
                 </TabsContent>
             </Tabs>
+
         </div>
     );
 }

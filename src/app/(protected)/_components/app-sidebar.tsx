@@ -64,16 +64,14 @@ export function AppSidebar() {
     return (
         <Sidebar>
             <SidebarHeader className="p-4 border-b border-b-gray-200 flex items-start justify-center">
-                <div className="flex items-center">
-                    <Stethoscope className="inline-block mr-2 text-primary" />
-                    <p className="text-2xl" >Pequi<span className="text-2xl text-center text-primary font-bold" >
-                        Med
-                    </span></p>
-
-
+                <div className="flex items-center justify-center">
+                    <p className="text-2xl font-normal" >
+                        Alphon
+                        <span className="text-center text-primary font-semibold" >
+                            Health
+                        </span>
+                    </p>
                 </div>
-
-
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
