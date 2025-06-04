@@ -68,7 +68,7 @@ export function SubscriptionPlan({
                     <h3 className="text-2xl font-bold text-gray-900">Essential</h3>
                     {active && (
                         <Badge className="bg-green-100 text-green-500 hover:bg-green-100">
-                            Atual
+                            Ativo
                         </Badge>
                     )}
                 </div>

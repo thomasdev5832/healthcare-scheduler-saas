@@ -12,6 +12,7 @@ const pathMap: Record<string, string> = {
     "clinic-form": "Configuração da Clínica",
     new: "Novo",
     edit: "Editar",
+    subscription: "Assinatura", // Adicionado para o breadcrumb
 };
 
 interface BreadcrumbItem {
@@ -27,26 +28,23 @@ export function PageBreadcrumb() {
     if (pathname === "/") return null;
 
     // Remove barras iniciais e finais e divide o caminho
-    const pathSegments = pathname.replace(/^\/|\/$/g, "").split("/");
+    const pathSegments = pathname.replace(/^\/+|\/+$/g, "").split("/");
 
     // Inicializa a lista de breadcrumbItems
     const breadcrumbItems: BreadcrumbItem[] = [];
 
-    // Adiciona o Menu Principal em todas as páginas, incluindo dashboard
-    breadcrumbItems.push({
-        href: "/dashboard",
-        label: "Menu Principal",
-        isCurrent: false, // Nunca será current, pois será sempre o primeiro item
-    });
-
-    // Se estiver na página dashboard, adiciona "Dashboard" como item current
+    // Caso especial para /dashboard
     if (pathname === "/dashboard") {
         breadcrumbItems.push({
-            href: "/dashboard?current=true",
+            href: "/dashboard",
+            label: "Menu Principal",
+            isCurrent: false,
+        });
+        breadcrumbItems.push({
+            href: "/dashboard-breadcrumb-current",
             label: "Dashboard",
             isCurrent: true,
         });
-
         return (
             <div className="py-3 px-6 border-b bg-muted/30">
                 <Breadcrumb items={breadcrumbItems} className="text-xs" />
@@ -54,30 +52,58 @@ export function PageBreadcrumb() {
         );
     }
 
-    // Cria o breadcrumb com base nos segmentos de caminho
-    let currentPath = "";
+    // Caso especial para /subscription
+    if (pathname === "/subscription") {
+        breadcrumbItems.push({
+            href: "#",
+            label: "Outros",
+            isCurrent: false,
+        });
+        breadcrumbItems.push({
+            href: "/subscription",
+            label: "Assinatura",
+            isCurrent: true,
+        });
+        return (
+            <div className="py-3 px-6 border-b bg-muted/30">
+                <Breadcrumb items={breadcrumbItems} className="text-xs" />
+            </div>
+        );
+    }
 
+    // Para todas as outras páginas protegidas
+    breadcrumbItems.push({
+        href: "/dashboard",
+        label: "Menu Principal",
+        isCurrent: false,
+    });
+
+    let currentPath = "";
+    let lastIndex = -1;
     for (let i = 0; i < pathSegments.length; i++) {
         const segment = pathSegments[i];
-
-        // Ignora segmentos vazios e os que não existem no mapa
-        if (!segment || !pathMap[segment]) continue;
-
+        if (!segment || segment === "dashboard" || !pathMap[segment]) continue;
         currentPath += `/${segment}`;
-
+        lastIndex = i;
+    }
+    // Adiciona os itens do breadcrumb conforme os segmentos
+    currentPath = "";
+    for (let i = 0; i < pathSegments.length; i++) {
+        const segment = pathSegments[i];
+        if (!segment || segment === "dashboard" || !pathMap[segment]) continue;
+        currentPath += `/${segment}`;
         breadcrumbItems.push({
-            href: currentPath,
+            href: `/dashboard${currentPath}`,
             label: pathMap[segment],
-            isCurrent: i === pathSegments.length - 1, // O último segmento é o atual
+            isCurrent: i === lastIndex,
         });
     }
 
-    // Se não tiver nenhum item, não mostra o breadcrumb
-    if (breadcrumbItems.length === 0) return null;
+    if (breadcrumbItems.length <= 1) return null;
 
     return (
         <div className="py-3 px-6 border-b bg-muted/30">
             <Breadcrumb items={breadcrumbItems} className="text-xs" />
         </div>
     );
-} 
+}
