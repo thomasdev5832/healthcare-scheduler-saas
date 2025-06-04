@@ -24,6 +24,10 @@ const AppointmentsPage = async () => {
         redirect("/clinic-form");
     }
 
+    if (!session.user.plan) {
+        redirect("/new-subscription");
+    }
+
     // Busca pacientes e médicos para o botão de adicionar
     const patients = await db.query.patientsTable.findMany({
         where: eq(patientsTable.clinicId, session.user.clinic.id),
