@@ -27,13 +27,13 @@ function HamburgerButton({ open, ...props }: { open: boolean } & React.ButtonHTM
           width="20"
           height="1.5"
           rx="1"
-          className={`transition-all duration-300 origin-center ${open ? 'rotate-45 translate-y-[4.5px]' : ''}`}
+          className={`transition-all duration-300 origin-center ${open ? 'rotate-45 translate-y-[5px]' : ''}`}
           fill="currentColor"
         />
         <rect
           x="3"
           y="12"
-          width="18"
+          width="20"
           height="1.5"
           rx="1"
           className={`transition-all duration-300 origin-center ${open ? 'opacity-0' : 'opacity-100'}`}
@@ -45,11 +45,96 @@ function HamburgerButton({ open, ...props }: { open: boolean } & React.ButtonHTM
           width="20"
           height="1.5"
           rx="1"
-          className={`transition-all duration-300 origin-center ${open ? '-rotate-45 translate-y-[-3.5px]' : ''}`}
+          className={`transition-all duration-300 origin-center ${open ? '-rotate-45 translate-y-[-3px]' : ''}`}
           fill="currentColor"
         />
       </svg>
     </button>
+  );
+}
+
+const features = [
+  {
+    icon: <Brain size={32} />,
+    title: "Agendamento Smart",
+    description: "Otimize o tempo da sua equipe e evite conflitos de horários com nosso sistema de agendamento fácil e rápido.",
+  },
+  {
+    icon: <Users size={32} />,
+    title: "Gestão de Pacientes",
+    description: "Tenha o histórico completo dos pacientes, prontuários e informações centralizadas em um só lugar.",
+  },
+  {
+    icon: <BarChart3 size={32} />,
+    title: "Relatórios e Indicadores",
+    description: "Acompanhe resultados, produtividade e indicadores essenciais para a gestão eficiente da clínica.",
+  },
+  {
+    icon: <Stethoscope size={32} />,
+    title: "Gestão de Profissionais",
+    description: "Gerencie facilmente a agenda, especialidades e informações dos profissionais da clínica em um só lugar.",
+  },
+  {
+    icon: <Headset size={32} />,
+    title: "Suporte Premium Consultivo",
+    description: "Conte com atendimento especializado e consultoria para potencializar a gestão e o crescimento da sua clínica.",
+  },
+  {
+    icon: <Bell size={32} />,
+    title: "Lembretes Automáticos",
+    description: "Reduza faltas com envio automático de lembretes de consultas por SMS, WhatsApp ou e-mail.",
+    soon: true,
+  },
+  {
+    icon: <Video size={32} />,
+    title: "Telemedicina Integrada",
+    description: "Realize atendimentos online com segurança, mantendo o histórico e registros integrados ao sistema.",
+    soon: true,
+  },
+  {
+    icon: <HandCoins size={32} />,
+    title: "Gestão Financeira",
+    description: "Controle receitas, despesas e fluxo de caixa da clínica de forma simples e integrada.",
+    soon: true,
+  },
+  {
+    icon: <LucideFileBadge size={32} />,
+    title: "Prontuário Eletrônico",
+    description: "Registre e acesse informações clínicas detalhadas com segurança e praticidade.",
+    soon: true,
+  },
+];
+
+function FeaturesSection() {
+  return (
+    <section
+      id="features"
+      className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mt-10"
+    >
+      <div className="col-span-full text-center mb-8">
+        <h2 className="text-3xl font-bold mb-2 text-primary">Funcionalidades</h2>
+        <p className="text-muted-foreground text-lg">
+          Simplifique a rotina da sua clínica com tecnologia de ponta: agende consultas, gerencie pacientes e acompanhe resultados em uma única plataforma intuitiva e segura.
+        </p>
+      </div>
+      {features.map((feature) => (
+        <div
+          key={feature.title}
+          className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative"
+        >
+          {feature.soon && (
+            <span className="absolute top-4 right-4 bg-primary/20 text-primary text-xs font-semibold px-3 py-1 rounded-lg shadow-sm z-10">
+              Em breve
+            </span>
+          )}
+          <span className="mb-3 text-primary">
+            <i>{feature.icon}</i>
+          </span>
+          <h2 className="text-xl font-semibold mb-2">{feature.title}</h2>
+          <p className="text-muted-foreground mb-4">{feature.description}</p>
+        </div>
+      ))}
+    </section>
   );
 }
 
@@ -167,95 +252,11 @@ export default function Home() {
           </PageHeader>
           <PageContent>
             {/* Seção de Funcionalidades */}
-            <section id="features" className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-              <div className="col-span-full text-center mb-8">
-                <h2 className="text-3xl font-bold mb-2 text-primary">Funcionalidades</h2>
-                <p className="text-muted-foreground text-lg">
-                  Simplifique a rotina da sua clínica com tecnologia de ponta: agende consultas, gerencie pacientes e acompanhe resultados em uma única plataforma intuitiva e segura.
-                </p>
-              </div>
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="mb-3 text-primary">
-                  <i><Brain size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Agendamento Inteligente</h2>
-                <p className="text-muted-foreground mb-4">Otimize o tempo da sua equipe e evite conflitos de horários com nosso sistema de agendamento fácil e rápido.</p>
-              </div>
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="mb-3 text-primary">
-                  <i><Users size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Gestão de Pacientes</h2>
-                <p className="text-muted-foreground mb-4">Tenha o histórico completo dos pacientes, prontuários e informações centralizadas em um só lugar.</p>
-              </div>
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="mb-3 text-primary">
-                  <i><BarChart3 size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Relatórios e Indicadores</h2>
-                <p className="text-muted-foreground mb-4">Acompanhe resultados, produtividade e indicadores essenciais para a gestão eficiente da clínica.</p>
-              </div>
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="mb-3 text-primary">
-                  <i><Stethoscope size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Gestão de Profissionais</h2>
-                <p className="text-muted-foreground mb-4">Gerencie facilmente a agenda, especialidades e informações dos profissionais da clínica em um só lugar.</p>
-              </div>
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="mb-3 text-primary">
-                  <i><Headset size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Suporte Premium Consultivo</h2>
-                <p className="text-muted-foreground mb-4">Conte com atendimento especializado e consultoria para potencializar a gestão e o crescimento da sua clínica.</p>
-              </div>
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="absolute bottom-5 bg-blue-100 text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm z-10">
-                  em breve
-                </span>
-                <span className="mb-3 text-primary">
-                  <i><Bell size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Lembretes Automáticos</h2>
-                <p className="text-muted-foreground mb-4">Reduza faltas com envio automático de lembretes de consultas por SMS, WhatsApp ou e-mail.</p>
-              </div>
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="absolute bottom-5 bg-blue-100 text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm z-10">
-                  em breve
-                </span>
-                <span className="mb-3 text-primary">
-                  <i><Video size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Telemedicina Integrada</h2>
-                <p className="text-muted-foreground mb-4">Realize atendimentos online com segurança, mantendo o histórico e registros integrados ao sistema.</p>
-              </div>
-              {/* Sugestão 1: Financeiro */}
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="absolute bottom-5 bg-blue-100 text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm z-10">
-                  em breve
-                </span>
-                <span className="mb-3 text-primary">
-                  <i><HandCoins size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Gestão Financeira</h2>
-                <p className="text-muted-foreground mb-4">Controle receitas, despesas e fluxo de caixa da clínica de forma simples e integrada.</p>
-              </div>
-              {/* Sugestão 2: Prontuário Eletrônico */}
-              <div className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative">
-                <span className="absolute bottom-5 bg-blue-100 text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm z-10">
-                  em breve
-                </span>
-                <span className="mb-3 text-primary">
-                  <i><LucideFileBadge size={32} /></i>
-                </span>
-                <h2 className="text-xl font-semibold mb-2">Prontuário Eletrônico</h2>
-                <p className="text-muted-foreground mb-4">Registre e acesse informações clínicas detalhadas com segurança e praticidade.</p>
-              </div>
-            </section>
+            <FeaturesSection />
 
             {/* Seção de FAQ */}
-            <section id="faq" className="w-full max-w-4xl mx-auto mt-16 flex flex-col items-center space-y-4">
-              <h2 className="text-2xl text-primary font-bold mb-6 text-center">Perguntas Frequentes (FAQ)</h2>
+            <section id="faq" className="w-full max-w-4xl mx-auto mt-20 flex flex-col items-center space-y-4">
+              <h2 className="text-3xl text-primary font-bold mb-6 text-center">Perguntas Frequentes (FAQ)</h2>
               <p className="text-muted-foreground text-lg text-center">
                 Aqui estão algumas das perguntas mais comuns sobre a plataforma Alphon.
                 <br />
@@ -301,7 +302,12 @@ export default function Home() {
                     },
                     {
                       question: "Quais formas de pagamento são aceitas?",
-                      answer: "Aceitamos pagamentos via cartão de crédito e PIX.",
+                      answer: "Aceitamos pagamentos via cartão ou PIX.",
+                    },
+                    {
+                      question: "Existe garantia de satisfação?",
+                      answer:
+                        "Sim! Você tem 30 dias para testar a plataforma. Se não ficar satisfeito, devolvemos todo o seu dinheiro.",
                     },
                   ].map((item, idx) => (
                     <AccordionItem
@@ -322,19 +328,19 @@ export default function Home() {
               </div>
             </section>
             {/* Seção de CTA */}
-            <section className="w-full max-w-3xl mx-auto mt-20 flex flex-col items-center bg-gradient-to-br from-primary/10 to-blue-50 rounded-2xl shadow-lg py-12 px-6 md:px-16 border border-primary/20">
+            <section className="w-full max-w-3xl mx-auto mt-20 flex flex-col items-center space-y-4 bg-gradient-to-br from-primary/10 to-blue-50 rounded-2xl shadow-lg py-12 px-6 md:px-16 border border-primary/20">
               <h3 className="text-3xl md:text-4xl font-extrabold text-primary mb-4 text-center">
-                Inove a gestão da sua clínica com tecnologia de ponta
+                Transforme sua clínica com uma plataforma moderna e intuitiva
               </h3>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 text-center max-w-2xl">
-                Coloque o paciente no centro de tudo. Simplifique processos, aumente a eficiência e ofereça uma experiência diferenciada para seus pacientes. Sua clínica mais ágil e inovadora.
+              <p className="text-lg md:text-xl text-muted-foreground text-center max-w-2xl">
+                Organize sua clínica, reduza tarefas manuais e atenda melhor seus pacientes. Simplifique processos e foque no que importa: o cuidado com a saúde.
               </p>
               <Link href="/authentication" passHref>
                 <Button
                   size="lg"
                   className="px-10 py-6 text-lg font-semibold shadow-md bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary hover:scale-105 hover:shadow-lg transition-all duration-200"
                 >
-                  Criar conta grátis
+                  Falar com especialista
                 </Button>
               </Link>
               <span className="mt-4 text-xs text-muted-foreground text-center">
