@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
             <PageHeaderContent>
                 <div className="w-full flex flex-col md:flex-row gap-10 sm:gap-2 items-center justify-center pb-10 min-h-[70vh] md:min-h-[70vh]">
                     {/* Coluna 1: texto e CTA */}
-                    <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left order-1 space-y-4 mb-4 mt-10">
+                    <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left order-1 space-y-4 mb-4 mt-2">
                         <div
                             className="flex items-center justify-center md:justify-start text-primary text-xs border border-primary/30 rounded-lg px-3 py-1 mb-4 bg-primary/10 animate-bounce-smooth"
                         >

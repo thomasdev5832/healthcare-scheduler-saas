@@ -16,7 +16,7 @@ export default function CtaSection() {
                 <Link href="/authentication">
                     <Button
                         size="lg"
-                        className="px-10 py-6 text-lg font-semibold shadow-md bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary hover:scale-105 hover:shadow-lg transition-all duration-200"
+                        className="w-full px-10 py-6 text-lg font-semibold shadow-md bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary hover:scale-105 hover:shadow-lg transition-all duration-200"
                     >
                         Testar grátis
                     </Button>
@@ -24,7 +24,7 @@ export default function CtaSection() {
                 <Link href="/authentication">
                     <Button
                         size="lg"
-                        className="px-10 py-6 text-lg text-muted-foreground font-semibold shadow-md bg-gradient-to-r from-muted to-blue-50 hover:scale-105 hover:shadow-lg transition-all duration-200"
+                        className="w-full px-10 py-6 text-lg text-muted-foreground font-semibold shadow-md bg-gradient-to-r from-muted to-blue-50 hover:scale-105 hover:shadow-lg transition-all duration-200"
                     >
                         Falar com especialista
                     </Button>
