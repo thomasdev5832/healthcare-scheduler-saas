@@ -6,7 +6,7 @@ import { ptBR } from "date-fns/locale";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { AlertCircle, Calendar as CalendarIcon, CalendarPlus, CheckCircle2, Clock, Clock2, SaveIcon, Trash2, TriangleAlert, XCircle } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
@@ -87,12 +87,10 @@ const UpsertAppointmentForm = ({
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [currentAppointmentTimeSlot, setCurrentAppointmentTimeSlot] = useState<string | null>(null);
 
-    // Função para extrair o horário de uma data
-    const extractTimeSlot = (date: Date): string => {
+    const extractTimeSlot = useCallback((date: Date): string => {
         return dayjs(date).format("HH:mm");
-    };
+    }, []);
 
-    // Inicializa o formulário com valores padrão
     const defaultValues = useMemo(() => ({
         patientId: appointment?.patientId ?? "",
         doctorId: appointment?.doctorId ?? "",
@@ -102,7 +100,7 @@ const UpsertAppointmentForm = ({
             ? appointment.appointmentPriceInCents / 100
             : 0,
         status: appointment?.status ?? "scheduled",
-    }), [appointment]);
+    }), [appointment, extractTimeSlot]);
 
     const form = useForm<FormValues>({
         // @ts-expect-error - Resolver type issues
@@ -120,7 +118,7 @@ const UpsertAppointmentForm = ({
                 setCurrentAppointmentTimeSlot(timeSlot);
             }
         }
-    }, [form, defaultValues, appointment, isOpen]);
+    }, [form, defaultValues, appointment, isOpen, extractTimeSlot]);
 
     const watchDoctorId = form.watch("doctorId");
     const watchPatientId = form.watch("patientId");
