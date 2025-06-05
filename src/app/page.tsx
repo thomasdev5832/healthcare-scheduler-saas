@@ -76,7 +76,7 @@ const features = [
   },
   {
     icon: <Headset size={32} />,
-    title: "Suporte Premium Consultivo",
+    title: "Suporte Premium",
     description: "Conte com atendimento especializado e consultoria para potencializar a gestão e o crescimento da sua clínica.",
   },
   {
@@ -120,18 +120,18 @@ function FeaturesSection() {
       {features.map((feature) => (
         <div
           key={feature.title}
-          className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative"
+          className="bg-card rounded-xl border shadow-sm p-6 flex flex-col items-start text-left transition-transform hover:-translate-y-1 hover:shadow-lg group cursor-pointer relative"
         >
           {feature.soon && (
-            <span className="absolute top-4 right-4 bg-primary/20 text-primary text-xs font-semibold px-3 py-1 rounded-lg shadow-sm z-10">
+            <span className="absolute top-4 right-4 bg-primary/20 text-primary text-[9px] font-semibold px-2 py-1 rounded-lg shadow-sm z-10">
               Em breve
             </span>
           )}
           <span className="mb-3 text-primary">
             <i>{feature.icon}</i>
           </span>
-          <h2 className="text-xl font-semibold mb-2">{feature.title}</h2>
-          <p className="text-muted-foreground mb-4">{feature.description}</p>
+          <h2 className="text-xl font-semibold mb-2 text-left">{feature.title}</h2>
+          <p className="text-muted-foreground mb-4 text-left">{feature.description}</p>
         </div>
       ))}
     </section>
@@ -145,6 +145,13 @@ export default function Home() {
     <>
       <header className="w-full md:w-7xl mx-auto md:px-0 flex items-center justify-between px-4 py-3 border-b bg-background fixed top-0 left-0 z-30 md:static md:bg-transparent md:border-0">
         <div className="flex items-center justify-center">
+          <Image
+            src="/logo-alphon-health-no-bg.png"
+            alt="Logo Alphon"
+            width={50}
+            height={50}
+            className=""
+          />
           <p
             className="text-3xl font-bold -tracking-tight bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent"
           >
@@ -254,6 +261,15 @@ export default function Home() {
             {/* Seção de Funcionalidades */}
             <FeaturesSection />
 
+            <section className="w-full max-w-4xl mx-auto mt-20 flex flex-col items-center space-y-4">
+              <h2 className="text-3xl text-primary font-bold mb-6 text-center">Reconhecimento</h2>
+              <p className="text-muted-foreground text-lg text-center">
+                Somos orgulhosamente participantes de programas de aceleração que impulsionam startups inovadoras em todo o mundo
+              </p>
+              <Image src="/google-startups.png" alt="Google for Startups" width={200} height={200} className="shadow-lg rounded-md hover:shadow-2xl transition duration-300" />
+              <p className="text-muted-foreground font-light mt-2">Ser parte destes programas nos permite oferecer soluções mais robustas e escaláveis para nossos clientes.</p>
+            </section>
+
             {/* Seção de FAQ */}
             <section id="faq" className="w-full max-w-4xl mx-auto mt-20 flex flex-col items-center space-y-4">
               <h2 className="text-3xl text-primary font-bold mb-6 text-center">Perguntas Frequentes (FAQ)</h2>
@@ -327,13 +343,14 @@ export default function Home() {
                 </Accordion>
               </div>
             </section>
+
             {/* Seção de CTA */}
             <section className="w-full max-w-3xl mx-auto mt-20 flex flex-col items-center space-y-4 bg-gradient-to-br from-primary/10 to-blue-50 rounded-2xl shadow-lg py-12 px-6 md:px-16 border border-primary/20">
               <h3 className="text-3xl md:text-4xl font-extrabold text-primary mb-4 text-center">
                 Transforme sua clínica com uma plataforma moderna e intuitiva
               </h3>
               <p className="text-lg md:text-xl text-muted-foreground text-center max-w-2xl">
-                Organize sua clínica, reduza tarefas manuais e atenda melhor seus pacientes. Simplifique processos e foque no que importa: o cuidado com a saúde.
+                Organize e reduza tarefas manuais e atenda melhor seus pacientes. Simplifique processos e foque no que importa: o cuidado com a saúde.
               </p>
               <Link href="/authentication" passHref>
                 <Button
@@ -347,6 +364,7 @@ export default function Home() {
                 Teste sem custos. Suporte consultivo incluso desde o primeiro acesso.
               </span>
             </section>
+
             { /* Footer */}
             <footer className="w-full mt-20 pt-10">
               <div className="w-full md:w-7xl mx-auto px-4 md:px-0 flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
@@ -414,9 +432,10 @@ export default function Home() {
                 </p>
               </div>
             </footer>
+
           </PageContent>
-        </PageContainer>
-      </main>
+        </PageContainer >
+      </main >
     </>
   );
 }
