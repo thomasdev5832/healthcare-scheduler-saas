@@ -16,7 +16,7 @@ export const PageHeader = ({ children }: { children: React.ReactNode }) => {
 
 export const PageHeaderContent = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="space-y-1 w-full flex flex-col items-center text-center">
+        <div className="space-y-1 w-full">
             {children}
         </div>
     );
@@ -24,7 +24,7 @@ export const PageHeaderContent = ({ children }: { children: React.ReactNode }) =
 
 export const PageTitle = ({ children }: { children: React.ReactNode }) => {
     return (
-        <h1 className="text-5xl font-semibold">
+        <h1 className="text-3xl font-semibold">
             {children}
         </h1>
     );
