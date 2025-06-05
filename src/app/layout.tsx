@@ -14,7 +14,7 @@ const inter = Inter({
 
 
 export const metadata: Metadata = {
-  title: "Alphon Health",
+  title: "Alphon - Gerencie sua clínica de forma simples e eficiente",
   description: "Gerencie sua clínica de forma simples e eficiente",
 };
 

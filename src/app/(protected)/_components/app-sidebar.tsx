@@ -1,11 +1,10 @@
 "use client"
 
-import { CalendarHeart, Gem, HeartPulse, LayoutDashboard, LogOut, Settings, Stethoscope, UsersRound } from "lucide-react"
-import Image from "next/image"
-//import Image from "next/image"
+import { CalendarHeart, Gem, HandCoins, Headset, HeartPulse, LayoutDashboard, LogOut, Mail, Settings, Stethoscope, Syringe, User, UsersRound, Video } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
+import LogoAlphon from "@/components/logo-alphon"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
@@ -45,6 +44,50 @@ const items = [
         url: "/patients",
         icon: UsersRound,
     },
+    {
+        title: "Telemedicina",
+        url: "/telehealth",
+        icon: Video,
+    },
+    {
+        title: "Financeiro",
+        url: "/financial",
+        icon: HandCoins,
+    },
+    {
+        title: "Marketing",
+        url: "/marketing",
+        icon: Mail,
+    },
+    {
+        title: "Estoque",
+        url: "/inventory",
+        icon: Syringe,
+    },
+]
+
+// Define other menu items for the "Outros" section.
+const otherItems = [
+    {
+        title: "Relatórios",
+        url: "/reports",
+        icon: HeartPulse,
+    },
+    {
+        title: "Suporte",
+        url: "/support",
+        icon: Headset,
+    },
+    {
+        title: "Plano",
+        url: "/plan",
+        icon: Gem,
+    },
+    {
+        title: "Configurações",
+        url: "/settings",
+        icon: Settings,
+    },
 ]
 
 export function AppSidebar() {
@@ -65,20 +108,7 @@ export function AppSidebar() {
     return (
         <Sidebar>
             <SidebarHeader className="p-4 border-b border-b-gray-200 flex items-start justify-center">
-                <div className="flex items-center justify-center">
-                    <Image
-                        src="/logo-alphon-health-no-bg.png"
-                        alt="Logo Alphon"
-                        width={50}
-                        height={50}
-                        className=""
-                    />
-                    <p
-                        className="text-3xl font-bold -tracking-tight bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent"
-                    >
-                        Alphon
-                    </p>
-                </div>
+                <LogoAlphon />
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
@@ -102,24 +132,27 @@ export function AppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupLabel>Outros</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenu>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton
-                                    asChild
-                                    isActive={pathname === "/subscription"}
-                                >
-                                    <Link href="/subscription">
-                                        <Gem />
-                                        <span>Assinatura</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton>
-                                    <Settings />
-                                    Configurações
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
+                        <SidebarMenu className="flex flex-col gap-y-2">
+                            {otherItems.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton
+                                        asChild={!!item.url}
+                                        isActive={item.url ? pathname === item.url : false}
+                                    >
+                                        {item.url ? (
+                                            <Link href={item.url} className={pathname === item.url ? "text-primary font-medium" : ""}>
+                                                <item.icon className={pathname === item.url ? "text-primary" : ""} />
+                                                <span className={pathname === item.url ? "text-primary" : ""}>{item.title}</span>
+                                            </Link>
+                                        ) : (
+                                            <>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </>
+                                        )}
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -132,7 +165,7 @@ export function AppSidebar() {
                                 <SidebarMenuButton size="lg" className="cursor-pointer">
                                     <Avatar>
                                         <AvatarFallback>
-                                            <HeartPulse className="w-5 h-5" />
+                                            <User className="w-5 h-5" />
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>

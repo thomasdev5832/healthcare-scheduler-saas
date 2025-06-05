@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import {
@@ -22,12 +23,18 @@ const AuthenticationPage = async () => {
 
     return (
         <div className="h-screen flex items-center justify-center flex-col gap-4">
-            <div className="flex items-center">
-                <p className="text-4xl font-normal" >
+            <div className="flex items-center justify-center">
+                <Image
+                    src="/logo-alphon-health-no-bg.png"
+                    alt="Logo Alphon"
+                    width={50}
+                    height={50}
+                    className=""
+                />
+                <p
+                    className="text-3xl font-bold -tracking-tight bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent"
+                >
                     Alphon
-                    <span className="text-center text-primary font-semibold" >
-                        Health
-                    </span>
                 </p>
             </div>
             <p className="text-sm text-gray-500">Faça login ou crie uma conta para continuar.</p>
