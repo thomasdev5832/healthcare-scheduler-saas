@@ -42,11 +42,11 @@ const Hero: React.FC = () => {
                             </PageDescription>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center md:justify-start items-center md:items-start">
-                            <Link href="/authentication">
-                                <Button size="lg" className="px-8 py-6 text-lg w-full sm:w-auto">Testar grátis</Button>
+                            <Link href="/authentication" className="flex-1 w-full sm:w-auto">
+                                <Button size="lg" className="px-8 py-6 text-lg w-full">Testar grátis</Button>
                             </Link>
-                            <Link href="#features">
-                                <Button size="lg" variant="outline" className="px-8 py-6 text-lg w-full sm:w-auto">Falar com especialista</Button>
+                            <Link href="#features" className="flex-1 w-full sm:w-auto">
+                                <Button size="lg" variant="outline" className="px-8 py-6 text-lg w-full">Falar com especialista</Button>
                             </Link>
                         </div>
                     </div>
