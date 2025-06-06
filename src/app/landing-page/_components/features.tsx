@@ -85,7 +85,7 @@ function FeaturesSection() {
 
             <div className="col-span-full mt-6 text-center">
                 <p className="text-muted-foreground text-md">
-                    Novas funcionalidades estão a caminho para impulsionar ainda mais a produtividade.
+                    Novas funcionalidades estão a caminho!
                     <br />
                     Estamos em constante evolução, nossa plataforma foi desenvolvida a partir das necessidades reais dos clientes.
                     <br />

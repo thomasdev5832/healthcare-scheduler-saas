@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function CtaSection() {
     return (
-        <section className="w-full max-w-3xl mx-auto mt-20 flex flex-col items-center space-y-4 bg-gradient-to-br from-blue-100/20 to-blue-100/30 rounded-2xl shadow-lg py-12 px-6 md:px-16 border border-primary/20">
+        <section id="cta" className="w-full max-w-3xl mx-auto mt-20 flex flex-col items-center space-y-4 bg-gradient-to-br from-blue-100/20 to-blue-100/30 rounded-2xl shadow-lg py-12 px-6 md:px-16 border border-primary/20">
             <h3 className="text-3xl md:text-4xl font-extrabold text-primary mb-4 text-center">
                 Transforme sua clínica com uma plataforma moderna e intuitiva
             </h3>

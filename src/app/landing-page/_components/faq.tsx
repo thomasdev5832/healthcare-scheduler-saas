@@ -52,8 +52,6 @@ function FaqSection() {
         <section id="faq" className="w-full max-w-4xl mx-auto mt-20 flex flex-col items-center space-y-8">
             <h2 className="text-4xl text-primary font-bold mb-6 text-center">Perguntas Frequentes</h2>
             <p className="text-muted-foreground text-lg text-center">
-                Aqui estão algumas das perguntas mais comuns.
-                <br />
                 Se tiver outras dúvidas, não hesite em entrar em contato conosco!
             </p>
             <div className="w-full max-w-2xl">
