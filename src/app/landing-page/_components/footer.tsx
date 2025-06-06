@@ -55,11 +55,9 @@ const Footer: React.FC = () => {
                 <div className="flex flex-col items-center md:items-start md:w-1/3">
                     <h3 className="text-lg font-semibold text-foreground mb-4">Entre em Contato</h3>
                     <div className="text-sm text-muted-foreground text-center md:text-left">
-                        <p>Email: <a href="mailto:contato@alphon.com" className="hover:text-primary transition-colors">contato@alphonlabs.com</a></p>
-                        <p>Telefone: (XX) XXXX-XXXX</p>
-                        <p className="mt-2">Horário de Atendimento: Seg-Sex, 9h-18h</p>
+                        <p>Email: <a href="mailto:alphonlabs@gmail.com" className="hover:text-primary transition-colors">alphonlabs@gmail.com</a></p>
+                        <p>Whatsapp: (31) 99972-5228</p>
                     </div>
-
                 </div>
             </div>
 

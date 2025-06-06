@@ -21,7 +21,7 @@ export default function CtaSection() {
                         Testar grátis
                     </Button>
                 </Link>
-                <Link href="/authentication">
+                <Link href="https://wa.link/2tgwzp">
                     <Button
                         size="lg"
                         className="w-full px-10 py-6 text-lg text-muted-foreground font-semibold shadow-md bg-gradient-to-r from-muted to-blue-50 hover:scale-105 hover:shadow-lg transition-all duration-200"

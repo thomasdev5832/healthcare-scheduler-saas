@@ -45,7 +45,7 @@ const Hero: React.FC = () => {
                             <Link href="/authentication" className="flex-1 w-full sm:w-auto">
                                 <Button size="lg" className="px-8 py-6 text-lg w-full">Testar grátis</Button>
                             </Link>
-                            <Link href="#features" className="flex-1 w-full sm:w-auto">
+                            <Link href="https://wa.link/2tgwzp" className="flex-1 w-full sm:w-auto">
                                 <Button size="lg" variant="outline" className="px-8 py-6 text-lg w-full">Falar com especialista</Button>
                             </Link>
                         </div>
