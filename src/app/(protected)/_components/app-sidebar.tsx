@@ -46,22 +46,22 @@ const items = [
     },
     {
         title: "Telemedicina",
-        url: "/telehealth",
+        url: "/",
         icon: Video,
     },
     {
         title: "Financeiro",
-        url: "/financial",
+        url: "/",
         icon: HandCoins,
     },
     {
         title: "Marketing",
-        url: "/marketing",
+        url: "/",
         icon: Mail,
     },
     {
         title: "Estoque",
-        url: "/inventory",
+        url: "/",
         icon: Syringe,
     },
 ]
@@ -70,22 +70,22 @@ const items = [
 const otherItems = [
     {
         title: "Relatórios",
-        url: "/reports",
+        url: "/",
         icon: HeartPulse,
     },
     {
         title: "Suporte",
-        url: "/support",
+        url: "/",
         icon: Headset,
     },
     {
         title: "Plano",
-        url: "/plan",
+        url: "/subscription",
         icon: Gem,
     },
     {
         title: "Configurações",
-        url: "/settings",
+        url: "/",
         icon: Settings,
     },
 ]
