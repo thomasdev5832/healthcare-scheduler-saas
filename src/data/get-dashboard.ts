@@ -33,6 +33,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
     topSpecialties,
     todayAppointments,
     dailyAppointmentsData,
+    [totalAppointmentsCompleted],
   ] = await Promise.all([
     db
       .select({
@@ -134,10 +135,24 @@ export const getDashboard = async ({ from, to, session }: Params) => {
           eq(appointmentsTable.clinicId, session.user.clinic.id),
           gte(appointmentsTable.date, chartStartDate),
           lte(appointmentsTable.date, chartEndDate),
+          eq(appointmentsTable.status, "completed"),
         ),
       )
       .groupBy(sql`DATE(${appointmentsTable.date})`)
       .orderBy(sql`DATE(${appointmentsTable.date})`),
+  db
+    .select({
+      total: count(),
+    })
+    .from(appointmentsTable)
+    .where(
+      and(
+        eq(appointmentsTable.clinicId, session.user.clinic.id),
+        gte(appointmentsTable.date, new Date(from)),
+        lte(appointmentsTable.date, new Date(to)),
+        eq(appointmentsTable.status, "completed"),
+      ),
+    ),
   ]);
 
   const [clinic] = await db
@@ -154,6 +169,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
     topSpecialties,
     todayAppointments,
     dailyAppointmentsData,
+    totalAppointmentsCompleted, 
     clinic,
   };
 };

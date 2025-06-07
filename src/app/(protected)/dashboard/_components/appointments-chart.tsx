@@ -115,7 +115,7 @@ export function AppointmentsChart({ dailyAppointmentsData }: RevenueChartProps) 
                                             <>
                                                 <div className="h-3 w-3 rounded bg-[#0B68F7]" />
                                                 <span className="text-muted-foreground">
-                                                    Agendamentos:
+                                                    Agendamentos concluídos:
                                                 </span>
                                                 <span className="font-semibold">{value}</span>
                                             </>
