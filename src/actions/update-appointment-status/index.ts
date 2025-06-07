@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -35,6 +35,30 @@ export const updateAppointmentStatus = actionClient
 
     if (!appointment) {
       throw new Error("Agendamento não encontrado");
+    }
+
+    // Se estamos tentando marcar como "scheduled", precisamos verificar conflitos
+    if (status === "scheduled" || status === "completed") {
+      // Verifica se já existe outro agendamento scheduled no mesmo horário e médico
+      const conflictingAppointment = await db.query.appointmentsTable.findFirst({
+        where: and(
+          eq(appointmentsTable.doctorId, appointment.doctorId),
+          eq(appointmentsTable.date, appointment.date),
+          eq(appointmentsTable.status, "scheduled"),
+          ne(appointmentsTable.id, id) // Exclui o próprio agendamento
+        ),
+        with: {
+          doctor: {
+            columns: {
+              name: true
+            }
+          }
+        }
+      });
+
+      if (conflictingAppointment) {
+        throw new Error(`Não é possível alterar este agendamento. O horário já está ocupado pelo ${conflictingAppointment.doctor.name}.`);
+      }
     }
 
     await db

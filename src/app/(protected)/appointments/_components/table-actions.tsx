@@ -39,39 +39,45 @@ const AppointmentsPageActions = ({ appointment }: AppointmentsPageActionsProps) 
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
-    const { execute: executeUpdateStatus } = useAction(updateAppointmentStatus);
+    const { execute: executeUpdateStatus, isExecuting } = useAction(updateAppointmentStatus, {
+        onSuccess: ({ input }) => {
+            // Invalida as queries para atualizar a interface
+            queryClient.invalidateQueries({ queryKey: appointmentKeys.all });
+
+            const statusMessages: Record<AppointmentStatus, string> = {
+                scheduled: "O agendamento foi marcado como agendado.",
+                completed: "O agendamento foi concluído com sucesso.",
+                canceled: "O agendamento foi cancelado.",
+                no_show: "O paciente não compareceu ao agendamento."
+            };
+
+            toast(
+                <div className="flex items-center gap-2">
+                    {React.createElement(statusConfig[input.status].icon, {
+                        className: cn("h-5 w-5", statusConfig[input.status].className)
+                    })}
+                    <span className={cn("font-medium", statusConfig[input.status].className)}>
+                        {statusConfig[input.status].label}
+                    </span>
+                </div>,
+                {
+                    description: statusMessages[input.status],
+                    className: statusConfig[input.status].className
+                }
+            );
+        },
+        onError: () => {
+            toast.error("Não foi possível alterar o status.", {
+                description: "Verifique se o médico está disponível no horário selecionado.",
+            });
+        }
+    });
 
     const handleStatusUpdate = async (status: AppointmentStatus) => {
         await executeUpdateStatus({
             id: appointment.id,
             status
         });
-
-        if (status === "canceled" || status === "no_show") {
-            queryClient.invalidateQueries({ queryKey: appointmentKeys.all });
-        }
-
-        const statusMessages: Record<AppointmentStatus, string> = {
-            scheduled: "O agendamento foi marcado como agendado.",
-            completed: "O agendamento foi concluído com sucesso.",
-            canceled: "O agendamento foi cancelado.",
-            no_show: "O paciente não compareceu ao agendamento."
-        };
-
-        toast(
-            <div className="flex items-center gap-2">
-                {React.createElement(statusConfig[status].icon, {
-                    className: cn("h-5 w-5", statusConfig[status].className)
-                })}
-                <span className={cn("font-medium", statusConfig[status].className)}>
-                    {statusConfig[status].label}
-                </span>
-            </div>,
-            {
-                description: statusMessages[status],
-                className: statusConfig[status].className
-            }
-        );
     };
 
     const statusConfig = {
@@ -101,7 +107,7 @@ const AppointmentsPageActions = ({ appointment }: AppointmentsPageActionsProps) 
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button className="cursor-pointer" variant="ghost" size="icon">
+                    <Button className="cursor-pointer" variant="ghost" size="icon" disabled={isExecuting}>
                         <Grip className="w-4 h-4" />
                     </Button>
                 </DropdownMenuTrigger>
@@ -110,6 +116,7 @@ const AppointmentsPageActions = ({ appointment }: AppointmentsPageActionsProps) 
                     <DropdownMenuItem
                         onClick={() => setIsOpen(true)}
                         className="cursor-pointer"
+                        disabled={isExecuting}
                     >
                         <Edit className="h-4 w-4 mr-2" />
                         Editar agendamento
@@ -123,10 +130,11 @@ const AppointmentsPageActions = ({ appointment }: AppointmentsPageActionsProps) 
                         return (
                             <DropdownMenuItem
                                 key={status}
-                                disabled={isCurrentStatus}
+                                disabled={isCurrentStatus || isExecuting}
                                 className={cn(
                                     "flex items-center gap-2 cursor-pointer",
-                                    isCurrentStatus && "font-medium"
+                                    isCurrentStatus && "font-medium",
+                                    isExecuting && "opacity-50"
                                 )}
                                 onClick={() => handleStatusUpdate(status as AppointmentStatus)}
                             >
