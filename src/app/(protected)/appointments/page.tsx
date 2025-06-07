@@ -2,13 +2,12 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { DataTable } from "@/components/ui/data-table";
-import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
 import { db } from "@/db";
 import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import AddAppointmentButton from "./_components/add-appointment-button";
+import { AppointmentsClient } from "./_components/appointments-client";
 import { appointmentsTableColumns } from "./_components/table-columns";
 
 const AppointmentsPage = async () => {
@@ -48,27 +47,14 @@ const AppointmentsPage = async () => {
     });
 
     return (
-        <PageContainer>
-            <PageHeader>
-                <PageHeaderContent>
-                    <PageTitle>Agendamentos</PageTitle>
-                    <PageDescription>Gerencie os agendamentos da sua clínica.</PageDescription>
-                </PageHeaderContent>
-                <PageActions>
-                    <AddAppointmentButton doctors={doctors} patients={patients} />
-                </PageActions>
-            </PageHeader>
-            <PageContent>
-                {appointments.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-10">
-                        <p className="text-muted-foreground text-lg">Nenhum agendamento cadastrado.</p>
-                    </div>
-                ) : (
-                    <DataTable columns={appointmentsTableColumns} data={appointments} />
-                )}
-            </PageContent>
-        </PageContainer>
+        <AppointmentsClient
+            patients={patients}
+            doctors={doctors}
+            appointments={appointments}
+            AddAppointmentButton={AddAppointmentButton}
+            appointmentsTableColumns={appointmentsTableColumns}
+        />
     );
 };
 
-export default AppointmentsPage; 
+export default AppointmentsPage;
