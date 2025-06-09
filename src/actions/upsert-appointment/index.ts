@@ -2,6 +2,7 @@
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { and, eq, ne } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -49,6 +50,30 @@ export const upsertAppointment = actionClient
 
     if (!session?.user.clinic?.id) {
       throw new Error("Clinic not found");
+    }
+
+     // Se estamos tentando marcar como "scheduled", precisamos verificar conflitos
+    if (status === "scheduled" || status === "completed") {
+      // Verifica se já existe outro agendamento scheduled ou completed no mesmo horário e médico
+      const conflictingAppointment = await db.query.appointmentsTable.findFirst({
+        where: and(
+          eq(appointmentsTable.doctorId, doctorId),
+          eq(appointmentsTable.date, appointmentDate),
+          eq(appointmentsTable.status, "scheduled"),
+          id ? ne(appointmentsTable.id, id) : undefined // Exclui o próprio agendamento, se estiver editando
+        ),
+        with: {
+          doctor: {
+            columns: {
+              name: true
+            }
+          }
+        }
+      });
+
+       if (conflictingAppointment) {
+        throw new Error(`Não é possível alterar este agendamento. O horário já está ocupado pelo ${conflictingAppointment.doctor.name}.`);
+      }
     }
 
     await db
