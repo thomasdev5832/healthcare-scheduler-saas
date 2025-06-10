@@ -75,7 +75,7 @@ const otherItems = [
     },
     {
         title: "Suporte",
-        url: "/",
+        url: "/support",
         icon: Headset,
     },
     {
