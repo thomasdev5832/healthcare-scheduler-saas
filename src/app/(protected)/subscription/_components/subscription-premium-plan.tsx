@@ -1,7 +1,7 @@
 "use client";
 
 import { loadStripe } from "@stripe/stripe-js";
-import { CheckCircle2, Gem, Loader2 } from "lucide-react";
+import { CheckCircle2, Crown, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 
@@ -10,17 +10,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-interface SubscriptionPlanProps {
+interface SubscriptionPremiumPlanProps {
     active?: boolean;
     className?: string;
     userEmail: string;
 }
 
-export function SubscriptionPlan({
+export function SubscriptionPremiumPlan({
     active = false,
     className,
     userEmail,
-}: SubscriptionPlanProps) {
+}: SubscriptionPremiumPlanProps) {
     const router = useRouter();
     const createStripeCheckoutAction = useAction(createStripeCheckout, {
         onSuccess: async ({ data }) => {
@@ -53,12 +53,14 @@ export function SubscriptionPlan({
     };
 
     const features = [
-        "Cadastro de até 3 médicos",
+        "Cadastro de médicos ilimitados",
         "Agendamentos ilimitados",
-        "Métricas básicas",
+        "Métricas avançadas",
         "Cadastro de pacientes",
-        "Confirmação manual",
-        "Suporte via e-mail e chat",
+        "Confirmação automática",
+        "Suporte prioritário via e-mail e chat",
+        "Relatórios personalizados",
+        "Integrações avançadas",
     ];
 
     return (
@@ -66,8 +68,8 @@ export function SubscriptionPlan({
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex flex-row gap-2 justify-center items-center">
-                        <Gem className="h-6 w-6 text-gray-800" />
-                        <h3 className="text-2xl font-bold text-gray-800">Essential</h3>
+                        <Crown className="h-6 w-6 text-gray-800" />
+                        <h3 className="text-2xl font-bold text-gray-800">Premium</h3>
                     </div>
                     {active && (
                         <Badge className="bg-green-100 text-green-500 hover:bg-green-100">
@@ -76,17 +78,17 @@ export function SubscriptionPlan({
                     )}
                 </div>
                 <p className="text-gray-600">
-                    Para profissionais autônomos ou pequenas clínicas
+                    Para clínicas e hospitais que buscam o máximo de eficiência
                 </p>
                 <div className="mt-4 flex gap-4">
                     <div className="border rounded-lg p-3 text-center w-full">
                         <p className="text-sm text-gray-500">Plano anual</p>
-                        <p className="text-xl font-bold text-gray-900">R$7.792/ano</p>
+                        <p className="text-xl font-bold text-gray-900">R$14.032/ano</p>
                         <p className="text-xs text-green-600 font-medium mt-1">Economize 35%</p>
                     </div>
                     <div className="border rounded-lg p-3 text-center w-full">
                         <p className="text-sm text-gray-500">Plano mensal</p>
-                        <p className="text-xl font-bold text-gray-900">R$999/mês</p>
+                        <p className="text-xl font-bold text-gray-900">R$1.799/mês</p>
                     </div>
                 </div>
             </CardHeader>
