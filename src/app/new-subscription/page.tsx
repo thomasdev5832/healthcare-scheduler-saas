@@ -1,9 +1,11 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import LogoAlphon from "@/components/logo-alphon";
 import { auth } from "@/lib/auth";
 
 import { SubscriptionPlan } from "../(protected)/subscription/_components/subscription-plan";
+import { SubscriptionPremiumPlan } from "../(protected)/subscription/_components/subscription-premium-plan";
 
 export default async function Home() {
     const session = await auth.api.getSession({
@@ -13,34 +15,33 @@ export default async function Home() {
         redirect("/login");
     }
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 pt-20">
-            <div className="w-full max-w-3xl text-center flex flex-col items-center justify-center">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-white pt-20">
+            <div className="w-full text-center flex flex-col items-center justify-center">
                 {/* Branding */}
-                <p className="mb-12 text-5xl font-light tracking-tight text-gray-800">
-                    Alphon<span className="text-primary font-semibold">Health</span>
-                </p>
+                <LogoAlphon />
 
                 {/* Headline inspiradora */}
-                <h1 className="mb-6 text-5xl font-extrabold tracking-tight text-gray-900">
-                    Simples. Poderoso. Eficiente.
+                <h1 className="mb-6 my-4 text-5xl font-extrabold tracking-tight text-gray-900">
+                    Simples. Completo. Eficiente.
                 </h1>
 
                 {/* Subheadline descritivo */}
-                <p className="mb-10 text-xl text-gray-600 leading-relaxed">
+                <p className="mb-10 text-xl max-w-2xl text-gray-600 leading-relaxed">
                     Transforme a gestão do seu consultório com uma plataforma que economiza seu tempo e melhora sua produtividade.
                 </p>
 
                 {/* Destaque com benefício-chave */}
                 <div className="mb-12 rounded-2xl border border-primary/50 bg-blue-50 px-3 py-3 shadow-md">
                     <p className="text-xs font-semibold text-primary leading-relaxed">
-                        🚀 Profissionais que usam o Alphon Health economizam em média{" "}
+                        🚀 Profissionais que usam a Alphon economizam em média{" "}
                         <span className="font-bold">15 horas por semana</span> em tarefas administrativas.
                     </p>
                 </div>
 
                 {/* Componente de planos */}
-                <div className="mb-12 w-full max-w-lg">
-                    <SubscriptionPlan userEmail={session.user.email} />
+                <div className="mb-12 flex flex-row space-x-10">
+                    <SubscriptionPlan className="w-full" userEmail={session.user.email} />
+                    <SubscriptionPremiumPlan className="w-full" userEmail={session.user.email} />
                 </div>
 
                 {/* Prova social e garantia */}
@@ -55,9 +56,7 @@ export default async function Home() {
                 </div>
             </div>
             <div className="bottom-0 left-0 w-full flex flex-col items-center bg-white py-4 mt-20">
-                <p className="text-sm font-light tracking-tight text-gray-800">
-                    Alphon<span className="text-primary font-semibold">Health</span>
-                </p>
+                <LogoAlphon />
                 <p className="text-center text-gray-500 text-xs">
                     © {new Date().getFullYear()} Alphon Technology. Todos os direitos reservados.
                 </p>

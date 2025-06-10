@@ -103,7 +103,7 @@ export function SubscriptionPlan({
                     ))}
                 </div>
 
-                <div className="mt-8 sticky bottom-4 bg-white">
+                <div className="mt-8 bg-white">
                     <Button
                         className="w-full"
                         variant={active ? "outline" : "default"}
