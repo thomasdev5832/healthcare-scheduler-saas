@@ -20,8 +20,9 @@ export default function SupportPage() {
                 <div className="flex flex-col gap-8 max-w-md items-center mx-auto">
                     {/* Seção de Contato */}
                     <div className="flex-1 border border-gray-200 rounded-xl p-8 bg-white shadow-sm">
-                        <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
-                            Como podemos ajudar?
+                        <LogoAlphon />
+                        <h3 className="text-2xl font-semibold text-gray-800 my-2 text-center">
+                            Como podemos te ajudar?
                         </h3>
                         <p className="text-gray-600 text-base mb-2 text-center">
                             Escolha a melhor forma de entrar em contato e receba suporte personalizado da nossa equipe.
@@ -42,11 +43,11 @@ export default function SupportPage() {
                                 </a>
                             </Button>
 
-                            <span className="text-sm text-gray-500">(Seg-Sex, 9h-18h)</span>
+                            <span className="text-sm text-gray-500">(Seg-Sex, 8h-18h)(Sáb, 8h-12h)</span>
                         </div>
                     </div>
                 </div>
-                <LogoAlphon />
+
             </PageContent>
         </PageContainer>
     );
